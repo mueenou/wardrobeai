@@ -37,7 +37,7 @@
           :src="outfit.imageUrl"
           alt="Outfit"
           class="cursor-pointer"
-          @click="showImage(outfit.imageUrl)"
+          @click="handleShowImage(outfit.imageUrl)"
         />
       </div>
     </div>
@@ -49,24 +49,17 @@
   </UCard>
 </template>
 
-<script lang="ts">
-import { defineProps, defineEmits } from "vue";
-const props = defineProps<{
-  day: string;
-  outfit: OutfitDetails;
-  isLoading: boolean;
-}>();
+<script setup>
 
-const emit = defineEmits<{
-  generateImage: [day: string, outfit: OutfitDetails];
-  showImage: [imageUrl: string];
-}>();
+const props = defineProps({
+  day: 1,
+  outfit: {},
+  isLoading: false,
+})
 
-const handleGenerateImage = () => {
-  emit("generateImage", props.day, props.outfit);
-};
+const emit = defineEmits(["generateImage", "showImage"]);
 
-const handleShowImage = (imageUrl: string) => {
+const handleShowImage = (imageUrl) => {
   emit("showImage", imageUrl);
 };
 </script>

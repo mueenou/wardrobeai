@@ -24,16 +24,15 @@
   </USlideover>
 </template>
 
-<script setup lang="ts">
-const props = defineProps<{
-  modelValue: boolean;
-  imageUrl?: string;
-  imageAlt?: string;
-}>();
+<script setup>
 
-const emit = defineEmits<{
-  "update:modelValue": [value: boolean];
-}>();
+const props = defineProps({
+  modelValue: false,
+  imageUrl: "",
+  imageAlt: "",
+})
+
+const emit = defineEmits(["update:modelValue"]);
 
 // Computed property pour gérer v-model
 const isOpenComputed = computed({

@@ -1,89 +1,19 @@
 <template>
   <div class="w-full flex flex-col md:flex-row h-full">
-    <div class="w-full rounded-xl text-sm overflow-y-auto px-6 py-6">
-      <p class="font-medium">Clothes listing form</p>
-      <p class="text-neutral-600 font-light text-xs">
-        This is the place where you are going to tell us all the clothes you are bringing
-        with you
-      </p>
-      <UDivider class="my-2" />
-      <form action="">
-        <UFormGroup label="Clothing type" size="2xs" class="my-2">
-          <UInputMenu
-            v-model="selectedClothingType"
-            :options="clothingTypes"
-            icon="mingcute:t-shirt-fill"
-          />
-        </UFormGroup>
-        <UFormGroup label="Cloth color" size="2xs" class="my-2">
-          <UInputMenu
-            v-model="selectedColor"
-            :options="clothingColors"
-            placeholder="Select a person"
-            by="id"
-            option-attribute="name"
-            :search-attributes="['name', 'color']"
-          >
-            <template #option="{ option: set }">
-              <span class="h-2 w-2 rounded-full" :class="`${set.color}`" />
-              <span class="truncate">{{ set.name }}</span>
-            </template>
-          </UInputMenu>
-        </UFormGroup>
-        <UFormGroup label="Clothing fabric" size="2xs" class="my-2">
-          <UInputMenu v-model="selectedFabric" :options="fabrics" icon="mdi:fabric" />
-        </UFormGroup>
-        <UFormGroup label="Weather suitability" size="2xs" class="my-2">
-          <UInputMenu
-            v-model="selectedWeatherSuitability"
-            :options="weatherSuitability"
-            icon="material-symbols:matter"
-          />
-        </UFormGroup>
-        <UFormGroup label="Style" size="2xs" class="my-2">
-          <UInputMenu
-            v-model="selectedStyleTag"
-            :options="styleTags"
-            icon="material-symbols:style"
-          />
-        </UFormGroup>
-        <UFormGroup label="Number of days" size="2xs" class="my-2">
-          <UInput
-            v-model="numberOfDays"
-            type="number"
-            min="1"
-            placeholder="How many days?"
-          />
-        </UFormGroup>
-
-        <UFormGroup label="Destination (optional)" size="2xs" class="my-2">
-          <UInput v-model="destination" placeholder="Where are you going?" />
-        </UFormGroup>
-        <div class="w-full justify-end text-right">
-          <UButton
-            @click="addClothToList"
-            label="Add cloth"
-            color="teal"
-            variant="outline"
-            size="2xs"
-            class="mt-2"
-          />
-        </div>
-      </form>
-      <ClothTable v-model="clothesList" />
-      <div class="text-right" v-if="clothesList.length > 0">
-        <UButton
-          label="Submit"
-          color="teal"
-          variant="outline"
-          size="2xs"
-          class="mt-4"
-          @click="generateOutfits"
-        />
-      </div>
-    </div>
+    <ClothingForm
+        v-model="clothesList"
+        :sexe="sexe"
+        :skin-color="skinColor"
+        :number-of-days="numberOfDays"
+        :destination="destination"
+        @update-sexe="changeSexe"
+        @update-no-days="changeNoDays"
+        @update-skin-color="changeSkinColor"
+        @update-destination="changeDestination"
+        @generate="generateOutfits"
+      />
     <UDivider orientation="vertical" type="dashed" />
-    <div
+    <!-- <div
       class="w-full rounded-xl pl-4 flex flex-col gap-y-4 text-sm overflow-y-auto pr-4 py-2 relative"
     >
       <div
@@ -148,22 +78,17 @@
         image-alt="Outfit Image"
       />
     </div>
-    <!-- <ClothingForm
-      v-model="clothesList"
-      :number-of-days="numberOfDays"
-      :destination="destination"
-      @generate="generateOutfits"
-    />
-    <UDivider orientation="vertical" type="dashed" />
+    
+    <UDivider orientation="vertical" type="dashed" /> -->
     <OutfitSuggestions
       :outfit-suggestions="outfitSuggestions"
       :is-loading="isLoading"
       @update-outfit="updateOutfit"
-    /> -->
+    />
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const isSliderOpen = ref(false);
 const currentImage = ref("");
 
@@ -171,183 +96,34 @@ const showImage = (imageUrl) => {
   currentImage.value = imageUrl;
   isSliderOpen.value = true;
 };
-// clothing types
-const clothingTypes = ref([
-  "Shirt",
-  "T-shirt",
-  "Blouse",
-  "Sweater",
-  "Hoodie",
-  "Jacket",
-  "Coat",
-  "Pants",
-  "Jeans",
-  "Shorts",
-  "Skirt",
-  "Dress",
-  "Suit",
-  "Blazer",
-  "Vest",
-  "Sweatpants",
-  "Joggers",
-  "Leggings",
-  "Cardigan",
-  "Tank Top",
-  "Polo Shirt",
-  "Swimsuit",
-  "Scarf",
-  "Hat",
-  "Gloves",
-  "Socks",
-  "Shoes",
-  "Sandals",
-  "Boots",
-  "Sneakers",
-  "Heels",
-  "Flats",
-  "Flip-Flops",
-]);
-const selectedClothingType = ref(clothingTypes.value[0]);
 
-// Colors
-const clothingColors = ref([
-  { id: 1, name: "Black", color: "bg-slate-900" },
-  { id: 2, name: "White", color: "bg-white" },
-  { id: 3, name: "Gray", color: "bg-slate-500" },
-  { id: 4, name: "Navy Blue", color: "bg-blue-800" },
-  { id: 5, name: "Blue", color: "bg-blue-500" },
-  { id: 6, name: "Sky Blue", color: "bg-blue-300" },
-  { id: 7, name: "Red", color: "bg-red-500" },
-  { id: 8, name: "Maroon", color: "bg-red-800" },
-  { id: 9, name: "Pink", color: "bg-pink-400" },
-  { id: 10, name: "Hot Pink", color: "bg-pink-500" },
-  { id: 11, name: "Purple", color: "bg-purple-500" },
-  { id: 12, name: "Lavender", color: "bg-purple-300" },
-  { id: 13, name: "Green", color: "bg-green-500" },
-  { id: 14, name: "Olive Green", color: "bg-green-800" },
-  { id: 15, name: "Yellow", color: "bg-yellow-400" },
-  { id: 16, name: "Orange", color: "bg-orange-500" },
-  { id: 17, name: "Brown", color: "bg-stone-800" },
-  { id: 18, name: "Beige", color: "bg-slate-200" },
-  { id: 19, name: "Cream", color: "bg-slate-100" },
-  { id: 20, name: "Teal", color: "bg-primary-600" },
-  { id: 21, name: "Turquoise", color: "bg-teal-400" },
-  { id: 22, name: "Gold", color: "bg-yellow-500" },
-  { id: 23, name: "Silver", color: "bg-slate-300" },
-  { id: 24, name: "Burgundy", color: "bg-red-900" },
-  { id: 25, name: "Khaki", color: "bg-slate-400" },
-]);
-const selectedColor = ref(clothingColors.value[0]);
-
-// Fabrics
-const fabrics = ref([
-  "Cotton",
-  "Linen",
-  "Wool",
-  "Polyester",
-  "Nylon",
-  "Silk",
-  "Rayon",
-  "Acrylic",
-  "Denim",
-  "Leather",
-  "Suede",
-  "Corduroy",
-  "Jersey",
-  "Velvet",
-  "Lace",
-  "Satin",
-  "Cashmere",
-  "Fleece",
-  "Spandex",
-]);
-const selectedFabric = ref(fabrics.value[0]);
-
-// Weather Suitability
-const weatherSuitability = ref([
-  "Hot",
-  "Warm",
-  "Cool",
-  "Cold",
-  "Rainy",
-  "Snowy",
-  "Windy",
-  "Humid",
-  "Dry",
-  "All-Weather",
-]);
-const selectedWeatherSuitability = ref(weatherSuitability.value[0]);
-
-// Style Tags
-const styleTags = ref([
-  "Casual",
-  "Formal",
-  "Business Casual",
-  "Sporty",
-  "Athleisure",
-  "Smart Casual",
-  "Chic",
-  "Elegant",
-  "Vintage",
-  "Streetwear",
-  "Bohemian",
-  "Minimalist",
-  "Trendy",
-  "Preppy",
-  "Punk",
-  "Glam",
-  "Retro",
-  "Beachwear",
-  "Activewear",
-  "Outdoor",
-  "Loungewear",
-  "Party",
-  "Festival",
-  "Holiday",
-  "Resort",
-]);
-const selectedStyleTag = ref(styleTags.value[0]);
-
-interface Cloth {
-  type: string;
-  color: { id: number; name: string; color: string };
-  fabric: string;
-  weather: string;
-  style: string;
-}
-
-const clothesList = ref<Cloth[]>([]);
-
-const addClothToList = () => {
-  const cloth = {
-    id: clothesList.value.length + 1,
-    type: selectedClothingType.value,
-    color: selectedColor.value,
-    fabric: selectedFabric.value,
-    weather: selectedWeatherSuitability.value,
-    style: selectedStyleTag.value,
-  };
-  clothesList.value.push(cloth);
-};
-
-const selectedColumns = [
-  { key: "type", label: "Type" },
-  { key: "color", label: "Color" },
-  { key: "fabric", label: "Fabric" },
-  { key: "weather", label: "Weather" },
-  { key: "style", label: "Style" },
-];
+const clothesList = ref([]);
 
 // Loading state
 const isLoading = ref(false);
 const outfitSuggestions = ref([]);
-// Handle delete action
-const handleDelete = async (item) => {
-  clothesList.value = clothesList.value.filter((cloth) => cloth.id !== item.id);
-};
 
+const sexe = ref("male")
+const skinColor = ref("fair")
 const numberOfDays = ref(1);
 const destination = ref("");
+
+const changeSexe = (newSexe) => {
+  sexe.value = newSexe;
+};
+
+const changeNoDays = (newNoDays) => {
+  numberOfDays.value = newNoDays;
+};
+
+const changeDestination = (newDestination) => {
+  destination.value = newDestination;
+};
+
+const changeSkinColor = (newSkinColor) => {
+  skinColor.value = newSkinColor;
+}; 
+
 
 // Fonction pour générer le prompt OpenAI
 const generateOOTDPrompt = () => {
@@ -369,7 +145,7 @@ const generateOOTDPrompt = () => {
   // Construire le prompt
   const prompt = `As a personal fashion stylist, create ${
     numberOfDays.value
-  } daily outfit combinations for a ${numberOfDays.value}-day trip${
+  } daily outfit combinations for a ${skinColor.value} skinned ${sexe.value} for a ${numberOfDays.value}-day trip${
     destination.value ? ` to ${destination.value}` : ""
   }.
 
@@ -407,7 +183,6 @@ Additional considerations:
 - Mix and match items efficiently for the ${numberOfDays.value}-day period
 - Consider versatility and reusability of items
 - Suggest possible accessories from the available items`;
-
   return prompt;
 };
 
@@ -415,7 +190,7 @@ const generateOutfits = async () => {
   try {
     isLoading.value = true;
 
-    const response = await $fetch<string>("/api/generate-outfits", {
+    const response = await $fetch("/api/generate-outfits", {
       method: "POST",
       body: {
         prompt: generateOOTDPrompt(),
@@ -433,8 +208,8 @@ const generateOutfits = async () => {
 };
 
 // Fonction pour transformer un outfit en prompt pour DALL-E
-const createImagePrompt = (outfitDetails: any) => {
-  const prompt = `Create a realistic fashion photography of a person wearing an outfit consisting of ${
+const createImagePrompt = (outfitDetails) => {
+  const prompt = `Create a realistic fashion photography of a ${skinColor.value} skinned ${sexe.value} wearing an outfit consisting of ${
     outfitDetails.Outfit
   }.
 The style is ${outfitDetails["Style Theme"]}, suitable for ${outfitDetails.Weather}.
@@ -451,20 +226,20 @@ Style this as a modern fashion magazine photo shoot.`;
 };
 
 // Définir un Map pour le statut de chargement de chaque outfit
-const loadingStates = ref(new Map<string, boolean>());
+const loadingStates = ref(new Map());
 
 // Fonction pour gérer le chargement d'un outfit spécifique
-const setOutfitLoading = (day: string, isLoading: boolean) => {
+const setOutfitLoading = (day, isLoading) => {
   loadingStates.value.set(day, isLoading);
 };
 
 // Fonction pour vérifier si un outfit spécifique est en cours de chargement
-const isOutfitLoading = (day: string) => {
+const isOutfitLoading = (day) => {
   return loadingStates.value.get(day) || false;
 };
 
 // Fonction pour générer l'image d'un outfit spécifique
-const generateOutfitImage = async (day: string, outfit: any) => {
+const generateOutfitImage = async (day, outfit) => {
   try {
     setOutfitLoading(day, true);
 
@@ -575,8 +350,9 @@ const generateOutfitImage = async (day: string, outfit: any) => {
 //   }
 // };
 
-// // Fonction pour mettre à jour une tenue
-// const updateOutfit = (day: string, outfit: OutfitDetails) => {
-//   outfitSuggestions.value[day] = outfit;
-// };
+// Fonction pour mettre à jour une tenue
+const updateOutfit = (day, outfit) => {
+  console.log(outfit)
+  outfitSuggestions.value[day] = outfit;
+};
 </script>

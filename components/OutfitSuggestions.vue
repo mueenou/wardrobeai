@@ -32,35 +32,36 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineProps, defineEmits } from "vue";
-const props = defineProps<{
-  outfitSuggestions: Record<string, OutfitDetails>;
-  isLoading: boolean;
-}>();
+<script setup>
+const props = defineProps({
+  outfitSuggestions: Array,
+  isLoading: false
+})
+
+const emit = defineEmits(["updateOutfit"]);
 
 // États locaux
 const isSliderOpen = ref(false);
 const currentImage = ref("");
-const loadingStates = ref(new Map<string, boolean>());
+const loadingStates = ref(new Map());
 
 // Fonctions pour la gestion du chargement
-const setOutfitLoading = (day: string, loading: boolean) => {
+const setOutfitLoading = (day, loading) => {
   loadingStates.value.set(day, loading);
 };
 
-const isOutfitLoading = (day: string) => {
+const isOutfitLoading = (day) => {
   return loadingStates.value.get(day) || false;
 };
 
 // Fonction pour afficher l'image
-const showImage = (imageUrl: string) => {
+const showImage = (imageUrl) => {
   currentImage.value = imageUrl;
   isSliderOpen.value = true;
 };
 
 // Fonction pour générer l'image
-const generateOutfitImage = async (day: string, outfit: OutfitDetails) => {
+const generateOutfitImage = async (day, outfit) => {
   try {
     setOutfitLoading(day, true);
     const imagePrompt = createImagePrompt(outfit);
@@ -82,7 +83,7 @@ const generateOutfitImage = async (day: string, outfit: OutfitDetails) => {
 };
 
 // Fonction pour créer le prompt d'image
-const createImagePrompt = (outfitDetails: OutfitDetails) => {
+const createImagePrompt = (outfitDetails) => {
   return `Create a realistic fashion photography of a person wearing an outfit consisting of ${
     outfitDetails.Outfit
   }. 

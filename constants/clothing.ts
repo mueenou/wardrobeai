@@ -105,3 +105,15 @@ export const STYLE_TAGS = [
   "Athleisure",
   // ... reste des styles
 ];
+
+export const SKIN_COLORS = [
+  "Fair",
+  "Light",
+  "Medium",
+  "Olive",
+  "Brown",
+  "Dark",
+  "Tan",
+  "Black",
+  "Very dark",
+];
