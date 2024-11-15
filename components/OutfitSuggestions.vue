@@ -34,7 +34,7 @@
 
 <script setup>
 const props = defineProps({
-  outfitSuggestions: Array,
+  outfitSuggestions: Object,
   isLoading: false
 })
 

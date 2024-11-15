@@ -141,10 +141,6 @@ const selectedFabric = ref(FABRICS[0]);
 const selectedWeatherSuitability = ref(WEATHER_SUITABILITY[0]);
 const selectedStyleTag = ref(STYLE_TAGS[0]);
 
-watch(selectedColor, (newQuestion, oldQuestion) => {
-  console.log(newQuestion.name)
-})
-
 // Computed pour la liste des vêtements
 const clothesList = computed({
   get: () => props.modelValue,
