@@ -9,73 +9,6 @@
       @generate="generateOutfits"
     />
     <UDivider orientation="vertical" type="dashed" />
-    <!-- <div
-      class="w-full rounded-xl pl-4 flex flex-col gap-y-4 text-sm overflow-y-auto pr-4 py-2 relative"
-    >
-      <div
-        v-if="isLoading"
-        class="sticky top-10 text-4xl flex flex-col justify-center items-center h-full"
-      >
-        <p class="text-sm">Please wait until we find the best outfits for you !</p>
-        <Icon name="eos-icons:three-dots-loading" class="text-teal-600" />
-      </div>
-      <UCard
-        v-if="outfitSuggestions && isLoading === false"
-        v-for="[day, outfit] in Object.entries(outfitSuggestions)"
-        :key="outfit"
-      >
-        <template #header>
-          <div class="flex gap-2 items-center font-bold">
-            <UBadge class="font-bold min-w-[55px] grid place-content-center">{{
-              day
-            }}</UBadge>
-            <p class="text-xs flex-grow">{{ outfit.Outfit }}</p>
-            <UTooltip text="See how it looks in an image!">
-              <UButton
-                size="2xs"
-                variant="outline"
-                class="self-end"
-                :icon="`${
-                  isOutfitLoading(day) ? 'eos-icons:three-dots-loading' : 'bi:stars'
-                }`"
-                @click="generateOutfitImage(day, outfit)"
-              >
-                {{ isOutfitLoading(day) ? "Generating" : "" }}
-              </UButton>
-            </UTooltip>
-          </div>
-        </template>
-        <div class="grid grid-cols-2 w-full items-center">
-          <div class="flex gap-2">
-            <p>{{ outfit["Style Theme"] }}</p>
-            <p>{{ outfit["Weather"] }}</p>
-            <p>{{ outfit["Accessories"] ? outfit["Accessories"] : "" }}</p>
-          </div>
-          <div>
-            <img
-              v-if="outfit.imageUrl"
-              :src="outfit.imageUrl"
-              alt="Outfit"
-              class="cursor-pointer"
-              @click="showImage(outfit.imageUrl)"
-            />
-          </div>
-        </div>
-        <template #footer>
-          <div class="flex gap-x-2 w-full justify-end">
-            <UBadge color="blue" v-for="pf in outfit['Perfect for']">{{ pf }}</UBadge>
-          </div>
-        </template>
-      </UCard>
-      <div v-else>No outfit suggestions available.</div>
-      <ImageSlideViewer
-        v-model="isSliderOpen"
-        :image-url="currentImage"
-        image-alt="Outfit Image"
-      />
-    </div>
-    
-    <UDivider orientation="vertical" type="dashed" /> -->
     <OutfitSuggestions
       :outfit-suggestions="outfitSuggestions"
       :is-loading="isLoading"
@@ -168,9 +101,16 @@ Additional considerations:
   return prompt;
 };
 
+const toast = useToast();
 const generateOutfits = async () => {
   try {
     isLoading.value = true;
+    toast.add({
+      severity: "info",
+      summary: "Generating outfits...",
+      description: "Please wait while we generate your outfit suggestions.",
+      timeout: 3000,
+    });
 
     const response = await $fetch("/api/generate-outfits", {
       method: "POST",
@@ -184,8 +124,20 @@ const generateOutfits = async () => {
     }
   } catch (error) {
     console.error("Error:", error);
+    toast.add({
+      severity: "error",
+      summary: "Error generating outfits",
+      description: "An error occurred while generating outfit suggestions.",
+      timeout: 3000,
+    });
   } finally {
     isLoading.value = false;
+    toast.add({
+      severity: "info",
+      summary: "Outfits generated",
+      description: "Your outfit suggestions are ready!",
+      timeout: 3000,
+    });
   }
 };
 

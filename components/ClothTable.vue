@@ -96,8 +96,15 @@ const columns = [
 // Initialize selected columns
 selectedColumns.value = [...columns];
 
+const toast = useToast();
 // Internal methods
 const handleDelete = async (item) => {
   items.value = items.value.filter((i) => i.id !== item.id);
+  toast.add({
+    title: "Item deleted",
+    description: `Item with ID ${item.id} has been deleted.`,
+    timeout: 3000,
+    icon: "i-bx-trash",
+  });
 };
 </script>

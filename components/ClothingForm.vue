@@ -169,6 +169,7 @@ const clothesList = computed({
   set: (value) => emit("update:modelValue", value),
 });
 
+const toast = useToast();
 // Fonction pour ajouter un vêtement
 const addClothToList = () => {
   const cloth = {
@@ -180,5 +181,11 @@ const addClothToList = () => {
     style: selectedStyleTag.value,
   };
   clothesList.value.push(cloth);
+  toast.add({
+    title: "Cloth added",
+    description: `A <b>${selectedClothingType.value}</b> color <b>${selectedColor.value.name}</b> was added to the list.`,
+    timeout: 3000,
+    icon: "i-bx-check",
+  });
 };
 </script>
