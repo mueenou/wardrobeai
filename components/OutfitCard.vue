@@ -50,12 +50,11 @@
 </template>
 
 <script setup>
-
 const props = defineProps({
-  day: 1,
-  outfit: {},
-  isLoading: false,
-})
+  day: String,
+  outfit: Object,
+  isLoading: Boolean,
+});
 
 const emit = defineEmits(["generateImage", "showImage"]);
 

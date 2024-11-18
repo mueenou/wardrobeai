@@ -1,17 +1,13 @@
 <template>
   <div class="w-full flex flex-col md:flex-row h-full">
     <ClothingForm
-        v-model="clothesList"
-        :sexe="sexe"
-        :skin-color="skinColor"
-        :number-of-days="numberOfDays"
-        :destination="destination"
-        @update-sexe="changeSexe"
-        @update-no-days="changeNoDays"
-        @update-skin-color="changeSkinColor"
-        @update-destination="changeDestination"
-        @generate="generateOutfits"
-      />
+      v-model="clothesList"
+      v-model:sexe="sexe"
+      v-model:numberOfDays="numberOfDays"
+      v-model:destination="destination"
+      v-model:skinColor="skinColor"
+      @generate="generateOutfits"
+    />
     <UDivider orientation="vertical" type="dashed" />
     <!-- <div
       class="w-full rounded-xl pl-4 flex flex-col gap-y-4 text-sm overflow-y-auto pr-4 py-2 relative"
@@ -84,6 +80,8 @@
       :outfit-suggestions="outfitSuggestions"
       :is-loading="isLoading"
       @update-outfit="updateOutfit"
+      :sexe="sexe"
+      :skinColor="skinColor"
     />
   </div>
 </template>
@@ -103,27 +101,10 @@ const clothesList = ref([]);
 const isLoading = ref(false);
 const outfitSuggestions = ref([]);
 
-const sexe = ref("male")
-const skinColor = ref("fair")
+const sexe = ref("male");
+const skinColor = ref("fair");
 const numberOfDays = ref(1);
 const destination = ref("");
-
-const changeSexe = (newSexe) => {
-  sexe.value = newSexe;
-};
-
-const changeNoDays = (newNoDays) => {
-  numberOfDays.value = newNoDays;
-};
-
-const changeDestination = (newDestination) => {
-  destination.value = newDestination;
-};
-
-const changeSkinColor = (newSkinColor) => {
-  skinColor.value = newSkinColor;
-}; 
-
 
 // Fonction pour générer le prompt OpenAI
 const generateOOTDPrompt = () => {
@@ -145,9 +126,9 @@ const generateOOTDPrompt = () => {
   // Construire le prompt
   const prompt = `As a personal fashion stylist, create ${
     numberOfDays.value
-  } daily outfit combinations for a ${skinColor.value} skinned ${sexe.value} for a ${numberOfDays.value}-day trip${
-    destination.value ? ` to ${destination.value}` : ""
-  }.
+  } daily outfit combinations for a ${skinColor.value} skinned ${sexe.value} for a ${
+    numberOfDays.value
+  }-day trip${destination.value ? ` to ${destination.value}` : ""}.
 
 Available Clothing Items:
 ${Object.entries(categorizedClothes)
@@ -183,6 +164,7 @@ Additional considerations:
 - Mix and match items efficiently for the ${numberOfDays.value}-day period
 - Consider versatility and reusability of items
 - Suggest possible accessories from the available items`;
+  console.log(prompt);
   return prompt;
 };
 
@@ -209,9 +191,9 @@ const generateOutfits = async () => {
 
 // Fonction pour transformer un outfit en prompt pour DALL-E
 const createImagePrompt = (outfitDetails) => {
-  const prompt = `Create a realistic fashion photography of a ${skinColor.value} skinned ${sexe.value} wearing an outfit consisting of ${
-    outfitDetails.Outfit
-  }.
+  const prompt = `Create a realistic fashion photography of a ${
+    skinColor.value
+  } skinned ${sexe.value} wearing an outfit consisting of ${outfitDetails.Outfit}.
 The style is ${outfitDetails["Style Theme"]}, suitable for ${outfitDetails.Weather}.
 The outfit should be photographed on a simple background.
 Focus on showcasing the outfit's details and how the pieces work together.
@@ -352,7 +334,7 @@ const generateOutfitImage = async (day, outfit) => {
 
 // Fonction pour mettre à jour une tenue
 const updateOutfit = (day, outfit) => {
-  console.log(outfit)
+  console.log(outfit);
   outfitSuggestions.value[day] = outfit;
 };
 </script>

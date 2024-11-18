@@ -25,12 +25,11 @@
 </template>
 
 <script setup>
-
 const props = defineProps({
-  modelValue: false,
-  imageUrl: "",
-  imageAlt: "",
-})
+  modelValue: Boolean,
+  imageUrl: String,
+  imageAlt: String,
+});
 
 const emit = defineEmits(["update:modelValue"]);
 

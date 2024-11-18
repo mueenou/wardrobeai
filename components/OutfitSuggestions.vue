@@ -35,8 +35,10 @@
 <script setup>
 const props = defineProps({
   outfitSuggestions: Object,
-  isLoading: false
-})
+  isLoading: Boolean,
+  sexe: String,
+  skinColor: String,
+});
 
 const emit = defineEmits(["updateOutfit"]);
 
@@ -84,9 +86,9 @@ const generateOutfitImage = async (day, outfit) => {
 
 // Fonction pour créer le prompt d'image
 const createImagePrompt = (outfitDetails) => {
-  return `Create a realistic fashion photography of a person wearing an outfit consisting of ${
-    outfitDetails.Outfit
-  }. 
+  return `Create a realistic fashion photography for a ${props.skinColor} skinned ${
+    props.sexe
+  } wearing an outfit consisting of ${outfitDetails.Outfit}. 
   The style is ${outfitDetails["Style Theme"]}, suitable for ${outfitDetails.Weather}. 
   The outfit should be photographed on a simple background.
   Focus on showcasing the outfit's details and how the pieces work together.

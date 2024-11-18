@@ -10,22 +10,33 @@
       />
     </div>
 
-    <UTable :columns="selectedColumns" :rows="items" :loading="isLoading">
+    <UTable
+      :columns="selectedColumns"
+      class="w-full"
+      rowClass="text-center"
+      :rows="items"
+      :loading="isLoading"
+    >
       <!-- Custom cell rendering for color preview -->
       <template #color-data="{ row }">
+        <!-- <pre>{{ row.color.color }}</pre> -->
         <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded-full" :class="`${row.color.color}`" />
+          <div
+            class="w-4 h-4 rounded-full"
+            :style="`background-color: ${row.color.hex}`"
+          />
           {{ row.color.name }}
         </div>
       </template>
 
       <!-- Custom cell rendering for actions -->
       <template #actions-data="{ row }">
-        <div class="flex items-center">
+        <div class="flex items-center w-full">
           <UButton
             color="red"
             variant="ghost"
             icon="i-heroicons-trash"
+            class="mx-auto"
             @click="handleDelete(row)"
           />
         </div>
@@ -43,6 +54,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+console.log(props.modelValue);
 
 const emit = defineEmits(["update:modelValue"]);
 
