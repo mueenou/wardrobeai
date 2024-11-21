@@ -12,14 +12,14 @@
   "dependencies": {
     "@nuxt/icon": "^1.5.8",
     "@nuxt/ui": "^2.18.7",
+    "@pinia/nuxt": "^0.7.0",
     "@vueuse/core": "^11.1.0",
     "nuxt": "^3.13.2",
     "openai": "^4.69.0",
+    "pinia": "^2.2.6",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "vee-validate": "^4.14.6",
-    "vue": "latest",
-    "vue-router": "latest"
+    "vee-validate": "^4.14.6"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.12.2"

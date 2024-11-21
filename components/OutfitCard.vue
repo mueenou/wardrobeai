@@ -26,12 +26,6 @@
         <p>{{ outfit["Accessories"] ? outfit["Accessories"] : "" }}</p>
       </div>
       <div>
-        <!-- <div v-if="isGenerating" class="mt-4">
-              <UProgress :value="progressValue" color="primary" />
-              <p class="text-sm text-gray-500 mt-2">
-                {{ generationStatus }}
-              </p>
-            </div> -->
         <img
           v-if="outfit.imageUrl"
           :src="outfit.imageUrl"

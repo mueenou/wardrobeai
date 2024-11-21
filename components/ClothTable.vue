@@ -1,6 +1,6 @@
 <!-- ClothTable.vue -->
 <template>
-  <div class="border rounded-lg mt-4" v-if="items.length > 0">
+  <div class="border rounded-lg mt-4" v-if="clothesList.length > 0">
     <div class="flex px-3 py-3.5 border-b border-slate200 dark:border-slate700">
       <USelectMenu
         v-model="selectedColumns"
@@ -14,12 +14,10 @@
       :columns="selectedColumns"
       class="w-full"
       rowClass="text-center"
-      :rows="items"
+      :rows="clothesList"
       :loading="isLoading"
     >
-      <!-- Custom cell rendering for color preview -->
       <template #color-data="{ row }">
-        <!-- <pre>{{ row.color.color }}</pre> -->
         <div class="flex items-center gap-2">
           <div
             class="w-4 h-4 rounded-full"
@@ -29,14 +27,12 @@
         </div>
       </template>
 
-      <!-- Custom cell rendering for actions -->
       <template #actions-data="{ row }">
         <div class="flex items-center w-full">
           <UButton
             color="red"
             variant="ghost"
             icon="i-heroicons-trash"
-            class="mx-auto"
             @click="handleDelete(row)"
           />
         </div>
@@ -47,25 +43,13 @@
 </template>
 
 <script setup>
-// Props using v-model pattern
-const props = defineProps({
-  modelValue: {
-    type: Array,
-    required: true,
-  },
-});
+import { storeToRefs } from "pinia";
+import { useOutfitStore } from "~/stores/outfit";
 
-console.log(props.modelValue);
+const outfitStore = useOutfitStore();
+const { clothesList } = storeToRefs(outfitStore);
 
-const emit = defineEmits(["update:modelValue"]);
-
-// Computed property for items to maintain reactivity
-const items = computed({
-  get: () => props.modelValue,
-  set: (newValue) => emit("update:modelValue", newValue),
-});
-
-// Internal state
+// State interne du composant
 const isLoading = ref(false);
 const selectedColumns = ref([]);
 
@@ -97,9 +81,9 @@ const columns = [
 selectedColumns.value = [...columns];
 
 const toast = useToast();
-// Internal methods
+// Suppression d'un élément de la liste
 const handleDelete = async (item) => {
-  items.value = items.value.filter((i) => i.id !== item.id);
+  outfitStore.removeCloth(item.id);
   toast.add({
     title: "Item deleted",
     description: `Item with ID ${item.id} has been deleted.`,

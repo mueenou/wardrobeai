@@ -8,15 +8,15 @@
     <UDivider class="my-2" />
     <form @submit.prevent>
       <URadioGroup
-        @change="emit('update:sexe', $event)"
+        @change="outfitStore.updateSexe($event)"
         legend="What is your gender?"
         :options="sexeOptions"
-        :model-value="props.sexe"
+        :model-value="sexe"
       />
       <UFormGroup label="Skin color" size="2xs" class="my-2">
         <UInputMenu
-          @change="emit('update:skinColor', $event)"
-          :value="props.skinColor"
+          @change="outfitStore.updateSkinColor($event)"
+          :value="skinColor"
           :options="skinColors"
         />
       </UFormGroup>
@@ -65,7 +65,7 @@
       </UFormGroup>
       <UFormGroup label="Number of days" size="2xs" class="my-2">
         <UInput
-          @input="emit('update:numberOfDays', Number($event.target.value))"
+          @input="outfitStore.updateNumberOfDays(Number($event.target.value))"
           type="number"
           min="1"
           placeholder="How many days?"
@@ -74,7 +74,7 @@
 
       <UFormGroup label="Destination (optional)" size="2xs" class="my-2">
         <UInput
-          @input="emit('update:destination', $event.target.value)"
+          @input="outfitStore.updateDestination($event.target.value)"
           placeholder="Where are you going?"
         />
       </UFormGroup>
@@ -104,6 +104,8 @@
 </template>
 
 <script setup>
+import { storeToRefs } from "pinia";
+import { useOutfitStore } from "~/stores/outfit";
 import { CLOTHING_TYPES } from "~/constants/clothing";
 import { CLOTHING_COLORS } from "~/constants/clothing";
 import { FABRICS } from "~/constants/clothing";
@@ -111,38 +113,10 @@ import { WEATHER_SUITABILITY } from "~/constants/clothing";
 import { STYLE_TAGS } from "~/constants/clothing";
 import { SKIN_COLORS } from "~/constants/clothing";
 
-const props = defineProps({
-  modelValue: Array,
-  numberOfDays: Number,
-  destination: String,
-  sexe: String,
-  skinColor: String,
-});
+const outfitStore = useOutfitStore();
+const { clothesList, sexe, skinColor } = storeToRefs(outfitStore);
 
-const emit = defineEmits([
-  "update:modelValue",
-  "generate",
-  "update:sexe",
-  "update:numberOfDays",
-  "update:destination",
-  "update:skinColor",
-]);
-
-// const changeSexe = ($event) => {
-//   emit("update:sexe", $event);
-// };
-
-// const changeNoDays = ($event) => {
-//   emit("update:numberOfDays", Number($event.target.value));
-// };
-
-// const changeDestination = ($event) => {
-//   emit("update:destination", $event.target.value);
-// };
-
-// const changeSkinColor = ($event) => {
-//   emit("update:skinColor", $event);
-// };
+const emit = defineEmits(["generate"]);
 
 // Constantes pour les options des selects
 const sexeOptions = [
@@ -163,12 +137,6 @@ const selectedFabric = ref(FABRICS[0]);
 const selectedWeatherSuitability = ref(WEATHER_SUITABILITY[0]);
 const selectedStyleTag = ref(STYLE_TAGS[0]);
 
-// Computed pour la liste des vêtements
-const clothesList = computed({
-  get: () => props.modelValue,
-  set: (value) => emit("update:modelValue", value),
-});
-
 const toast = useToast();
 // Fonction pour ajouter un vêtement
 const addClothToList = () => {
@@ -180,7 +148,7 @@ const addClothToList = () => {
     weather: selectedWeatherSuitability.value,
     style: selectedStyleTag.value,
   };
-  clothesList.value.push(cloth);
+  outfitStore.addCloth(cloth);
   toast.add({
     title: "Cloth added",
     description: `A <b>${selectedClothingType.value}</b> color <b>${selectedColor.value.name}</b> was added to the list.`,
