@@ -3,6 +3,7 @@
     <!-- this is a register form with email and password and Github, Google provider -->
     <UContainer class="border rounded-lg px-10 py-10 w-[500px]">
       <UForm class="space-y-6" @submit="signIn">
+        <h2 class="text-center font-bold">Login</h2>
         <UFormGroup label="Email" name="email">
           <UInput v-model="email" />
         </UFormGroup>
@@ -18,12 +19,12 @@
         <UButton block color="white" variant="outline" icon="i-mdi:github">
           GitHub
         </UButton>
-        <UButton block color="red" variant="outline" icon="i-mdi:google">
+        <UButton block color="white" variant="outline" icon="i-mdi:google">
           Google
         </UButton>
         <p class="text-center text-sm">
           Don't have an account?
-          <span><nuxt-link to="/login" class="underline">Register</nuxt-link></span>
+          <span><nuxt-link to="/register" class="underline">Register</nuxt-link></span>
         </p>
       </UForm>
     </UContainer>

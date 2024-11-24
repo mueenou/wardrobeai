@@ -2,7 +2,7 @@
   <div class="lg:block hidden border-r dark:border-slate-800 h-full">
     <div class="flex h-full max-h-screen flex-col gap-2">
       <div
-        class="flex h-[55px] items-center justify-between border-b dark:border-slate-800 px-3 w-full sticky top-0 bg-black dark:bg-teal-900 z-10"
+        class="flex h-[55px] items-center justify-between border-b dark:border-slate-800 px-3 w-full sticky top-0 dark:bg-black z-10"
       >
         <nuxt-link to="/">
           <h1 class="font-bold">Wardrobe.AI</h1>
@@ -40,12 +40,22 @@
             >
               <Icon name="lucide:history" />
             </div>
-            History
+            My Trips
           </nuxt-link>
           <div class="flex-grow"></div>
-          <div v-if="user" class="bottom-0">
-            <p>{{ user.email }}</p>
-            <UButton @click="signOut" label="Logout" variant="outline" color="white" />
+          <div v-if="user" class="flex items-center gap-x-4 justify-between w-full">
+            <UAvatar
+              size="md"
+              src="https://avatars.githubusercontent.com/u/739984?v=4"
+              alt="Avatar"
+            />
+            <UButton
+              @click="signOut"
+              label="Logout"
+              variant="none"
+              color="white"
+              icon="i-mdi:logout"
+            />
           </div>
         </nav>
       </div>
@@ -62,7 +72,7 @@ async function signOut() {
   try {
     const { error } = await client.auth.signOut();
     if (error) throw error;
-    route.push("/login");
+    navigateTo("/login");
   } catch (error) {
     console.log(error.message);
   }
