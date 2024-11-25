@@ -2,4 +2,8 @@
   <div>History page</div>
 </template>
 
-<script setup></script>
+<script setup>
+definePageMeta({
+  layout: "registered-layout",
+});
+</script>

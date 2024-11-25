@@ -1,18 +1,20 @@
 <template>
-  <div class="lg:block hidden border-r dark:border-slate-800 h-full">
-    <div class="flex h-full max-h-screen flex-col gap-2">
+  <div
+    class="lg:block hidden border-r dark:border-slate-800 h-screen sticky left-0 top-0 z-10"
+  >
+    <div class="flex h-full max-h-screen flex-col gap-2 sticky left-0">
       <div
-        class="flex h-[55px] items-center justify-between border-b dark:border-slate-800 px-3 w-full"
+        class="flex h-[55px] items-center justify-between border-b dark:border-slate-800 px-3 w-full dark:bg-black z-10"
       >
         <nuxt-link to="/">
           <h1 class="font-bold">Wardrobe.AI</h1>
         </nuxt-link>
       </div>
       <div class="flex-1 overflow-auto py-2">
-        <nav class="grid items-start px-4 text-sm font-medium">
+        <nav class="flex flex-col items-start px-4 text-sm font-medium w-full h-full">
           <nuxt-link
             to="/"
-            class="flex items-center gap-x-2"
+            class="flex items-center gap-x-2 w-full"
             :class="[
               route.path === '/'
                 ? 'flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-slate-900  transition-all hover:text-slate-900 dark:bg-slate-800 dark:text-slate-50 dark:hover:text-slate-50'
@@ -28,7 +30,7 @@
           </nuxt-link>
           <nuxt-link
             to="/history"
-            class="flex items-center gap-x-2"
+            class="flex items-center gap-x-2 w-full"
             :class="[
               route.path === '/history'
                 ? 'flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-slate-900  transition-all hover:text-slate-900 dark:bg-slate-800 dark:text-slate-50 dark:hover:text-slate-50'
@@ -40,8 +42,23 @@
             >
               <Icon name="lucide:history" />
             </div>
-            History
+            My Trips
           </nuxt-link>
+          <div class="flex-grow"></div>
+          <div v-if="user" class="flex items-center gap-x-4 justify-between w-full">
+            <UAvatar
+              size="md"
+              src="https://avatars.githubusercontent.com/u/739984?v=4"
+              alt="Avatar"
+            />
+            <UButton
+              @click="signOut"
+              label="Logout"
+              variant="none"
+              color="white"
+              icon="i-mdi:logout"
+            />
+          </div>
         </nav>
       </div>
     </div>
@@ -49,5 +66,17 @@
 </template>
 
 <script setup>
+const user = useSupabaseUser();
+const client = useSupabaseClient();
 const route = useRoute();
+
+async function signOut() {
+  try {
+    const { error } = await client.auth.signOut();
+    if (error) throw error;
+    navigateTo("/login");
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 </script>

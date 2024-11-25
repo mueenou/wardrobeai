@@ -9,7 +9,12 @@
 
 <script setup>
 import { useOutfitStore } from "~/stores/outfit";
+definePageMeta({
+  layout: "registered-layout",
+});
 
+const user = useSupabaseUser();
+console.log(user);
 const store = useOutfitStore();
 const toast = useToast();
 
