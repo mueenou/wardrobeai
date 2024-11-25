@@ -1,14 +1,16 @@
 <template>
-  <div class="lg:block hidden border-r dark:border-slate-800 h-full">
-    <div class="flex h-full max-h-screen flex-col gap-2">
+  <div
+    class="lg:block hidden border-r dark:border-slate-800 h-screen sticky left-0 top-0 z-10"
+  >
+    <div class="flex h-full max-h-screen flex-col gap-2 sticky left-0">
       <div
-        class="flex h-[55px] items-center justify-between border-b dark:border-slate-800 px-3 w-full sticky top-0 dark:bg-black z-10"
+        class="flex h-[55px] items-center justify-between border-b dark:border-slate-800 px-3 w-full dark:bg-black z-10"
       >
         <nuxt-link to="/">
           <h1 class="font-bold">Wardrobe.AI</h1>
         </nuxt-link>
       </div>
-      <div class="flex-1 overflow-auto py-2 h-full">
+      <div class="flex-1 overflow-auto py-2">
         <nav class="flex flex-col items-start px-4 text-sm font-medium w-full h-full">
           <nuxt-link
             to="/"

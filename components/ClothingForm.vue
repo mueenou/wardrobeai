@@ -1,7 +1,7 @@
 <template>
   <div class="w-full rounded-xl text-sm overflow-y-auto px-6 py-6">
-    <p class="font-medium">Clothes listing form</p>
-    <p class="text-neutral-600 font-light text-xs">
+    <p class="font-medium text-lg">Clothes listing form</p>
+    <p class="dark:text-neutral-300 text-sm">
       This is the place where you are going to tell us all the clothes you are bringing
       with you
     </p>
@@ -13,21 +13,21 @@
         :options="sexeOptions"
         :model-value="sexe"
       />
-      <UFormGroup label="Skin color" size="2xs" class="my-2">
+      <UFormGroup label="Skin color" size="sm" class="my-2">
         <UInputMenu
           @change="outfitStore.updateSkinColor($event)"
           :value="skinColor"
           :options="skinColors"
         />
       </UFormGroup>
-      <UFormGroup label="Clothing type" size="2xs" class="my-2">
+      <UFormGroup label="Clothing type" size="sm" class="my-2">
         <UInputMenu
           v-model="selectedClothingType"
           :options="clothingTypes"
           icon="mingcute:t-shirt-fill"
         />
       </UFormGroup>
-      <UFormGroup label="Cloth color" size="2xs" class="my-2">
+      <UFormGroup label="Cloth color" size="sm" class="my-2">
         <UInputMenu
           v-model="selectedColor"
           :options="clothingColors"
@@ -42,28 +42,28 @@
           </template>
         </UInputMenu>
       </UFormGroup>
-      <UFormGroup label="Clothing fabric" size="2xs" class="my-2">
+      <UFormGroup label="Clothing fabric" size="sm" class="my-2">
         <UInputMenu
           v-model="selectedFabric"
           :options="clothingFabrics"
           icon="mdi:fabric"
         />
       </UFormGroup>
-      <UFormGroup label="Weather suitability" size="2xs" class="my-2">
+      <UFormGroup label="Weather suitability" size="sm" class="my-2">
         <UInputMenu
           v-model="selectedWeatherSuitability"
           :options="weatherSuitability"
           icon="material-symbols:matter"
         />
       </UFormGroup>
-      <UFormGroup label="Style" size="2xs" class="my-2">
+      <UFormGroup label="Style" size="sm" class="my-2">
         <UInputMenu
           v-model="selectedStyleTag"
           :options="styleTags"
           icon="material-symbols:style"
         />
       </UFormGroup>
-      <UFormGroup label="Number of days" size="2xs" class="my-2">
+      <UFormGroup label="Number of days" size="sm" class="my-2">
         <UInput
           @input="outfitStore.updateNumberOfDays(Number($event.target.value))"
           type="number"
@@ -72,7 +72,7 @@
         />
       </UFormGroup>
 
-      <UFormGroup label="Destination (optional)" size="2xs" class="my-2">
+      <UFormGroup label="Destination (optional)" size="sm" class="my-2">
         <UInput
           @input="outfitStore.updateDestination($event.target.value)"
           placeholder="Where are you going?"
@@ -84,7 +84,7 @@
           label="Add cloth"
           color="teal"
           variant="outline"
-          size="2xs"
+          size="sm"
           class="mt-2"
         />
       </div>
@@ -95,7 +95,7 @@
         label="Submit"
         color="teal"
         variant="outline"
-        size="2xs"
+        size="sm"
         class="mt-4"
         @click="$emit('generate')"
       />
