@@ -14,11 +14,21 @@ definePageMeta({
 });
 
 const user = useSupabaseUser();
-console.log(user);
 const store = useOutfitStore();
 const toast = useToast();
 
 const handleGenerate = async () => {
+  if (store.destination === "") {
+    toast.add({
+      severity: "error",
+      icon: "i-heroicons-information-circle",
+      summary: "Incomplete form",
+      description:
+        "<p class='text-red-500'><strong>Destination</strong> is required.</p>",
+      timeout: 3000,
+    });
+    return;
+  }
   try {
     toast.add({
       severity: "info",

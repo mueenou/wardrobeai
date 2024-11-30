@@ -1,5 +1,7 @@
 // stores/outfit.js
 import { defineStore } from "pinia";
+import { sub, format, isSameDay } from "date-fns";
+import { useUserStore } from "~/stores/user";
 
 export const useOutfitStore = defineStore("outfit", {
   state: () => ({
@@ -7,6 +9,10 @@ export const useOutfitStore = defineStore("outfit", {
     sexe: "male",
     skinColor: "fair",
     numberOfDays: 1,
+    tripDates: {
+      start: sub(new Date(), { days: 14 }),
+      end: new Date(),
+    },
     destination: "",
     outfitSuggestions: null,
     isLoading: false,
@@ -28,13 +34,15 @@ export const useOutfitStore = defineStore("outfit", {
     updateSkinColor(value) {
       this.skinColor = value;
     },
+    updateTripDates(dates) {
+      this.tripDates = dates;
+    },
     updateNumberOfDays(value) {
       this.numberOfDays = value;
     },
     updateDestination(value) {
       this.destination = value;
     },
-    // Clothes list management
     updateClothesList(newList) {
       this.clothesList = newList;
     },
@@ -117,6 +125,20 @@ export const useOutfitStore = defineStore("outfit", {
       - Suggest possible accessories from the available items`;
     },
 
+    async addTripDataToUserStore() {
+      const user = useSupabaseUser();
+      const userStore = useUserStore();
+      const trip = {
+        clothes_list: this.clothesList,
+        start_date: this.tripDates.start,
+        end_date: this.tripDates.end,
+        destination: this.destination,
+        outfit_suggestions: this.outfitSuggestions,
+        user_id: user.id,
+      };
+      userStore.addTrip(trip);
+    },
+
     // API calls
     async generateOutfits() {
       try {
@@ -130,9 +152,23 @@ export const useOutfitStore = defineStore("outfit", {
 
         if (response) {
           this.outfitSuggestions = JSON.parse(response);
+          const userStore = useUserStore();
+          console.log(this.tripDates);
+          const trip = {
+            clothes_list: this.clothesList,
+            start_date: this.tripDates.start,
+            end_date: this.tripDates.end,
+            destination: this.destination,
+            outfit_suggestions: this.outfitSuggestions,
+          };
+          userStore.addTrip(trip);
+          await fetch("/api/add-trip", {
+            method: "POST",
+            body: JSON.stringify(trip),
+            headers: { "Content-Type": "application/json" },
+          });
         }
       } catch (error) {
-        console.error("Error:", error);
         throw error;
       } finally {
         this.isLoading = false;

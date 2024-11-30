@@ -1,17 +1,17 @@
 <template>
   <div class="flex flex-col">
     <header
-      class="flex min-h-14 lg:min-h-[55px] items-center gap-4 border-b dark:border-slate-800 px-6 sticky top-0 dark:bg-black z-10"
+      class="flex min-h-14 lg:min-h-[55px] items-center gap-4 border-b dark:border-slate-800 px-6 sticky top-0 dark:bg-primary-950 z-10 bg-primary"
     >
       <div class="flex items-center w-full justify-end">
         <ClientOnly>
           <UTooltip :text="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
-            <UButton
-              :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
-              color="gray"
-              variant="ghost"
-              aria-label="Theme"
+            <Icon
+              :name="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
               @click="isDark = !isDark"
+              :class="`${
+                isDark ? 'text-gray-50' : 'text-gray-50'
+              } text-2xl cursor-pointer drop-shadow-md`"
             />
           </UTooltip>
           <template #fallback>
