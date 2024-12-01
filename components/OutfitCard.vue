@@ -1,5 +1,5 @@
 <template>
-  <UCard>
+  <UCard class="border border-primary">
     <template #header>
       <div class="flex gap-2 items-center font-bold">
         <UBadge class="font-bold min-w-[55px] grid place-content-center">{{

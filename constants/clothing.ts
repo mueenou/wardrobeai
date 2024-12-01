@@ -35,9 +35,15 @@ export const CLOTHING_TYPES = [
 ];
 
 export const CLOTHING_COLORS = [
-  { id: 1, name: "Black", color: "bg-slate-900", hex: "#000000" },
-  { id: 2, name: "White", color: "bg-white", hex: "#FFFFFF" },
-  { id: 3, name: "Gray", color: "bg-slate-500", hex: "#808080" },
+  {
+    id: 1,
+    name: "Black",
+    color: "bg-slate-900",
+    hex: "#000000",
+    value: "black",
+  },
+  { id: 2, name: "White", color: "bg-white", hex: "#FFFFFF", value: "white" },
+  { id: 3, name: "Gray", color: "bg-slate-500", hex: "#808080", value: "gray" },
   { id: 4, name: "Navy Blue", color: "bg-blue-800", hex: "#000080" },
   { id: 5, name: "Blue", color: "bg-blue-500", hex: "#0000FF" },
   { id: 6, name: "Sky Blue", color: "bg-blue-300", hex: "#87CEEB" },

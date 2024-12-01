@@ -7,12 +7,15 @@
     </p>
     <UDivider class="my-2" />
     <form @submit.prevent>
-      <URadioGroup
+      <!-- <URadioGroup
         @change="outfitStore.updateSexe($event)"
         legend="What is your gender?"
         :options="sexeOptions"
         :model-value="sexe"
-      />
+      /> -->
+      <UFormGroup label="What is your gender?" size="sm" class="my-2">
+        <GenderSelector v-model="sexe" />
+      </UFormGroup>
       <UFormGroup label="Skin color" size="sm" class="my-2">
         <UInputMenu
           color="primary"
@@ -31,7 +34,7 @@
         <ClothImageInput v-model="selectedClothingType" />
       </UFormGroup>
       <UFormGroup label="Cloth color" size="sm" class="my-2">
-        <UInputMenu
+        <!-- <UInputMenu
           color="primary"
           v-model="selectedColor"
           :options="clothingColors"
@@ -44,7 +47,8 @@
             <span :class="`h-3 w-8 rounded`" :style="`background-color: ${set.hex}`" />
             <span class="truncate">{{ set.name }}</span>
           </template>
-        </UInputMenu>
+        </UInputMenu> -->
+        <ColorSelector v-model="selectedColor" />
       </UFormGroup>
       <UFormGroup label="Clothing fabric" size="sm" class="my-2">
         <UInputMenu
