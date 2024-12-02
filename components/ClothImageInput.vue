@@ -1,20 +1,27 @@
 <template>
-  <div>
+  <div class="relative">
+    <div
+      class="absolute bg-primary/40 text-gray-900 dark:text-gray-50 bottom-0 left-0 rounded-tr-sm p-1 shadow text-xs font-bold backdrop-blur-lg"
+    >
+      <nuxt-link to="https://www.flaticon.com/">
+        <p>Illustrations by flaticon.com</p>
+      </nuxt-link>
+    </div>
     <UInput
       placeholder="Search your cloth"
       label="Submit"
       color="indigo"
       variant="outline"
       size="sm"
-      class="my-2"
+      class="my-2 w-fit"
       v-model="clothesFilter"
     />
     <div
-      class="flex gap-2 flex-wrap max-h-[300px] overflow-y-auto p-2 border border-primary rounded justify-center"
+      class="flex gap-2 flex-wrap max-h-[300px] overflow-y-auto p-2 pb-8 border border-primary rounded"
     >
       <div
-        class="border w-[100px] h-[100px] rounded flex flex-col items-center justify-center hover:border-primary cursor-pointer"
-        :class="{ 'ring-2 ring-primary': modelValue === cloth.value }"
+        class="border w-[100px] h-[100px] rounded flex flex-col items-center gap-y-1 justify-center hover:border-primary cursor-pointer"
+        :class="{ 'ring-2 ring-orange-500 border-none': modelValue === cloth.value }"
         v-for="cloth in filteredData"
         :key="cloth.id"
         @click="selectCloth(cloth.value)"
@@ -49,6 +56,8 @@ const clothes = ref([
   { id: 38, name: "High heels", image: "high-heels.png", value: "high-heels" },
   { id: 4, name: "Cap", image: "cap.png", value: "cap" },
   { id: 39, name: "Winter hat", image: "winter-hat.png", value: "winter-hat" },
+  // hijab
+  { id: 42, name: "Hijab", image: "hijab.png", value: "hijab" },
   { id: 5, name: "Sunglasses", image: "sunglasses.png", value: "sunglasses" },
   { id: 41, name: "Long sleeve", image: "long-sleeve.png", value: "long-sleeve" },
   { id: 6, name: "Jacket", image: "jacket.png", value: "jacket" },

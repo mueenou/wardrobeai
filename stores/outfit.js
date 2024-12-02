@@ -6,8 +6,8 @@ import { useUserStore } from "~/stores/user";
 export const useOutfitStore = defineStore("outfit", {
   state: () => ({
     clothesList: [],
-    sexe: "male",
-    skinColor: "fair",
+    sexe: "",
+    ethnicity: "Western European",
     numberOfDays: 1,
     tripDates: {
       start: sub(new Date(), { days: 14 }),
@@ -31,14 +31,16 @@ export const useOutfitStore = defineStore("outfit", {
     updateSexe(value) {
       this.sexe = value;
     },
-    updateSkinColor(value) {
-      this.skinColor = value;
+    updateEthnicity(value) {
+      this.ethnicity = value;
     },
     updateTripDates(dates) {
+      console.log(dates);
       this.tripDates = dates;
-    },
-    updateNumberOfDays(value) {
-      this.numberOfDays = value;
+      const startDate = new Date(dates.start);
+      const endDate = new Date(dates.end);
+      const diffTime = Math.abs(endDate - startDate);
+      this.numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
     },
     updateDestination(value) {
       this.destination = value;
@@ -75,7 +77,6 @@ export const useOutfitStore = defineStore("outfit", {
         acc[category].push({
           color: item.color.name,
           fabric: item.fabric,
-          weather: item.weather,
           style: item.style,
         });
         return acc;
@@ -83,7 +84,7 @@ export const useOutfitStore = defineStore("outfit", {
 
       return `As a personal fashion stylist, create ${
         this.numberOfDays
-      } daily outfit combinations for a ${this.skinColor} skinned ${
+      } daily outfit combinations for a ${this.ethnicity} skinned ${
         this.sexe
       } for a ${this.numberOfDays}-day trip${
         this.destination ? ` to ${this.destination}` : ""
@@ -96,7 +97,7 @@ export const useOutfitStore = defineStore("outfit", {
             `${category}:\n${items
               .map(
                 (item) =>
-                  `- ${item.color} ${category} (${item.fabric}, ${item.weather} weather, ${item.style} style)`
+                  `- ${item.color} ${category} (${item.fabric}, ${item.style} style)`
               )
               .join("\n")}`
         )
@@ -104,18 +105,16 @@ export const useOutfitStore = defineStore("outfit", {
       
       Please provide:
       1. ${this.numberOfDays} different daily outfit combinations
-      2. Consider weather suitability and style consistency
+      2. Consider style consistency
       3. For each day, specify:
          - Morning to evening outfit
          - Style theme of the day
-         - Weather appropriateness
          - Suggested activities this outfit would be perfect for
       
       Format each day as an object:
       "Day X:
       - Outfit: String
       - Style Theme: String
-      - Weather: String
       - Perfect for: [activities]"
       
       Additional considerations:
@@ -153,7 +152,6 @@ export const useOutfitStore = defineStore("outfit", {
         if (response) {
           this.outfitSuggestions = JSON.parse(response);
           const userStore = useUserStore();
-          console.log(this.tripDates);
           const trip = {
             clothes_list: this.clothesList,
             start_date: this.tripDates.start,
@@ -177,13 +175,11 @@ export const useOutfitStore = defineStore("outfit", {
 
     createImagePrompt(outfitDetails) {
       return `Create a realistic fashion photography for a ${
-        this.skinColor
+        this.ethnicity
       } skinned ${this.sexe} wearing an outfit consisting of ${
         outfitDetails.Outfit
       }. 
-      The style is ${outfitDetails["Style Theme"]}, suitable for ${
-        outfitDetails.Weather
-      }. 
+      The style is ${outfitDetails["Style Theme"]}. 
       The outfit should be photographed on a simple background.
       Focus on showcasing the outfit's details and how the pieces work together.
       ${
