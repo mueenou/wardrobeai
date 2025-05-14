@@ -109,6 +109,7 @@ export const STYLE_TAGS = [
   "Business Casual",
   "Sporty",
   "Athleisure",
+  "Large Wear",
 ];
 
 export const ETHNICITIES = [

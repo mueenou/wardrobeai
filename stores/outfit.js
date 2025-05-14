@@ -174,20 +174,11 @@ export const useOutfitStore = defineStore("outfit", {
     },
 
     createImagePrompt(outfitDetails) {
-      return `Create a realistic fashion photography for a ${
-        this.ethnicity
-      } skinned ${this.sexe} wearing an outfit consisting of ${
-        outfitDetails.Outfit
-      }. 
+      let prompt = `Create a realistic full body head to feet fashion photography for a ${this.ethnicity} skinned ${this.sexe} wearing an outfit consisting of ${outfitDetails.Outfit}. 
       The style is ${outfitDetails["Style Theme"]}. 
-      The outfit should be photographed on a simple background.
-      Focus on showcasing the outfit's details and how the pieces work together.
-      ${
-        outfitDetails.Accessories !== "None"
-          ? `Include these accessories: ${outfitDetails.Accessories}.`
-          : ""
-      }
-      Style this as a modern fashion magazine photo shoot.`;
+      The outfit should be photographed in ${this.destination}. It should be a png image.
+      Focus on showcasing the outfit's details and how the pieces work together.`;
+      return prompt;
     },
 
     async generateOutfitImage(day, outfit) {
@@ -201,7 +192,7 @@ export const useOutfitStore = defineStore("outfit", {
 
         this.updateOutfit(day, {
           ...outfit,
-          imageUrl: response.data[0].url,
+          imageUrl: response.image,
         });
       } catch (error) {
         console.error("Error generating outfit image:", error);

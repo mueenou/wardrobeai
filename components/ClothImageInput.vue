@@ -17,7 +17,7 @@
       v-model="clothesFilter"
     />
     <div
-      class="flex gap-2 flex-wrap max-h-[300px] overflow-y-auto p-2 pb-8 border border-primary rounded"
+      class="flex gap-2 flex-wrap max-h-[300px] w-[675px] overflow-y-auto p-2 pb-8 border border-primary rounded"
     >
       <div
         class="border w-[100px] h-[100px] rounded flex flex-col items-center gap-y-1 justify-center hover:border-primary cursor-pointer"
@@ -54,6 +54,7 @@ const clothes = ref([
   { id: 20, name: "Socks", image: "socks.png", value: "socks" },
   { id: 3, name: "Sneakers", image: "sneakers.png", value: "shoes" },
   { id: 38, name: "High heels", image: "high-heels.png", value: "high-heels" },
+  { id: 17, name: "Flip-flops", image: "flip-flops.png", value: "flip-flops" },
   { id: 4, name: "Cap", image: "cap.png", value: "cap" },
   { id: 39, name: "Winter hat", image: "winter-hat.png", value: "winter-hat" },
   // hijab
@@ -87,7 +88,6 @@ const clothes = ref([
     image: "swimsuit-woman.png",
     value: "swimsuit-woman",
   },
-  { id: 17, name: "Flip-flops", image: "flip-flops.png", value: "flip-flops" },
   { id: 18, name: "Tie", image: "tie.png", value: "tie" },
   { id: 19, name: "Watch", image: "wrist-watch.png", value: "watch" },
   { id: 22, name: "Smart watch", image: "smart-watch.png", value: "smart-watch" },

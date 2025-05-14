@@ -7,7 +7,7 @@
         class="flex h-[55px] items-center justify-between border-b dark:border-slate-800 px-3 w-full dark:bg-primary-950 z-10 bg-primary"
       >
         <nuxt-link to="/">
-          <h1 class="font-bold text-secondary dark:text-gray-100 uppercase">
+          <h1 class="font-black text-2xl text-secondary dark:text-gray-100 uppercase">
             Wardrobe.AI
           </h1>
         </nuxt-link>
