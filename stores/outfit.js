@@ -1,12 +1,18 @@
 // stores/outfit.js
 import { defineStore } from "pinia";
+import { sub, format, isSameDay } from "date-fns";
+import { useUserStore } from "~/stores/user";
 
 export const useOutfitStore = defineStore("outfit", {
   state: () => ({
     clothesList: [],
-    sexe: "male",
-    skinColor: "fair",
+    sexe: "",
+    ethnicity: "Western European",
     numberOfDays: 1,
+    tripDates: {
+      start: sub(new Date(), { days: 14 }),
+      end: new Date(),
+    },
     destination: "",
     outfitSuggestions: null,
     isLoading: false,
@@ -25,16 +31,20 @@ export const useOutfitStore = defineStore("outfit", {
     updateSexe(value) {
       this.sexe = value;
     },
-    updateSkinColor(value) {
-      this.skinColor = value;
+    updateEthnicity(value) {
+      this.ethnicity = value;
     },
-    updateNumberOfDays(value) {
-      this.numberOfDays = value;
+    updateTripDates(dates) {
+      console.log(dates);
+      this.tripDates = dates;
+      const startDate = new Date(dates.start);
+      const endDate = new Date(dates.end);
+      const diffTime = Math.abs(endDate - startDate);
+      this.numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
     },
     updateDestination(value) {
       this.destination = value;
     },
-    // Clothes list management
     updateClothesList(newList) {
       this.clothesList = newList;
     },
@@ -67,7 +77,6 @@ export const useOutfitStore = defineStore("outfit", {
         acc[category].push({
           color: item.color.name,
           fabric: item.fabric,
-          weather: item.weather,
           style: item.style,
         });
         return acc;
@@ -75,7 +84,7 @@ export const useOutfitStore = defineStore("outfit", {
 
       return `As a personal fashion stylist, create ${
         this.numberOfDays
-      } daily outfit combinations for a ${this.skinColor} skinned ${
+      } daily outfit combinations for a ${this.ethnicity} skinned ${
         this.sexe
       } for a ${this.numberOfDays}-day trip${
         this.destination ? ` to ${this.destination}` : ""
@@ -88,7 +97,7 @@ export const useOutfitStore = defineStore("outfit", {
             `${category}:\n${items
               .map(
                 (item) =>
-                  `- ${item.color} ${category} (${item.fabric}, ${item.weather} weather, ${item.style} style)`
+                  `- ${item.color} ${category} (${item.fabric}, ${item.style} style)`
               )
               .join("\n")}`
         )
@@ -96,18 +105,16 @@ export const useOutfitStore = defineStore("outfit", {
       
       Please provide:
       1. ${this.numberOfDays} different daily outfit combinations
-      2. Consider weather suitability and style consistency
+      2. Consider style consistency
       3. For each day, specify:
          - Morning to evening outfit
          - Style theme of the day
-         - Weather appropriateness
          - Suggested activities this outfit would be perfect for
       
       Format each day as an object:
       "Day X:
       - Outfit: String
       - Style Theme: String
-      - Weather: String
       - Perfect for: [activities]"
       
       Additional considerations:
@@ -115,6 +122,20 @@ export const useOutfitStore = defineStore("outfit", {
       - Mix and match items efficiently for the ${this.numberOfDays}-day period
       - Consider versatility and reusability of items
       - Suggest possible accessories from the available items`;
+    },
+
+    async addTripDataToUserStore() {
+      const user = useSupabaseUser();
+      const userStore = useUserStore();
+      const trip = {
+        clothes_list: this.clothesList,
+        start_date: this.tripDates.start,
+        end_date: this.tripDates.end,
+        destination: this.destination,
+        outfit_suggestions: this.outfitSuggestions,
+        user_id: user.id,
+      };
+      userStore.addTrip(trip);
     },
 
     // API calls
@@ -130,9 +151,22 @@ export const useOutfitStore = defineStore("outfit", {
 
         if (response) {
           this.outfitSuggestions = JSON.parse(response);
+          const userStore = useUserStore();
+          const trip = {
+            clothes_list: this.clothesList,
+            start_date: this.tripDates.start,
+            end_date: this.tripDates.end,
+            destination: this.destination,
+            outfit_suggestions: this.outfitSuggestions,
+          };
+          userStore.addTrip(trip);
+          await fetch("/api/add-trip", {
+            method: "POST",
+            body: JSON.stringify(trip),
+            headers: { "Content-Type": "application/json" },
+          });
         }
       } catch (error) {
-        console.error("Error:", error);
         throw error;
       } finally {
         this.isLoading = false;
@@ -140,22 +174,11 @@ export const useOutfitStore = defineStore("outfit", {
     },
 
     createImagePrompt(outfitDetails) {
-      return `Create a realistic fashion photography for a ${
-        this.skinColor
-      } skinned ${this.sexe} wearing an outfit consisting of ${
-        outfitDetails.Outfit
-      }. 
-      The style is ${outfitDetails["Style Theme"]}, suitable for ${
-        outfitDetails.Weather
-      }. 
-      The outfit should be photographed on a simple background.
-      Focus on showcasing the outfit's details and how the pieces work together.
-      ${
-        outfitDetails.Accessories !== "None"
-          ? `Include these accessories: ${outfitDetails.Accessories}.`
-          : ""
-      }
-      Style this as a modern fashion magazine photo shoot.`;
+      let prompt = `Create a realistic full body head to feet fashion photography for a ${this.ethnicity} skinned ${this.sexe} wearing an outfit consisting of ${outfitDetails.Outfit}. 
+      The style is ${outfitDetails["Style Theme"]}. 
+      The outfit should be photographed in ${this.destination}. It should be a png image.
+      Focus on showcasing the outfit's details and how the pieces work together.`;
+      return prompt;
     },
 
     async generateOutfitImage(day, outfit) {
@@ -169,7 +192,7 @@ export const useOutfitStore = defineStore("outfit", {
 
         this.updateOutfit(day, {
           ...outfit,
-          imageUrl: response.data[0].url,
+          imageUrl: response.image,
         });
       } catch (error) {
         console.error("Error generating outfit image:", error);

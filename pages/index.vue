@@ -1,6 +1,6 @@
 <!-- index.vue -->
 <template>
-  <div class="w-full flex flex-col md:flex-row h-full">
+  <div class="mx-auto flex flex-col h-full mb-8 md:flex-row">
     <ClothingForm @generate="handleGenerate" />
     <UDivider orientation="vertical" type="dashed" />
     <OutfitSuggestions />
@@ -13,12 +13,21 @@ definePageMeta({
   layout: "registered-layout",
 });
 
-const user = useSupabaseUser();
-console.log(user);
 const store = useOutfitStore();
 const toast = useToast();
 
 const handleGenerate = async () => {
+  if (store.destination === "" || store.sexe === "") {
+    toast.add({
+      severity: "error",
+      icon: "i-heroicons-information-circle",
+      summary: "Incomplete form",
+      description:
+        "<p class='text-red-500'><strong>Some fields</strong> are required.</p>",
+      timeout: 3000,
+    });
+    return;
+  }
   try {
     toast.add({
       severity: "info",

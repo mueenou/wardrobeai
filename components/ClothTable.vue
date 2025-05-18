@@ -1,7 +1,7 @@
 <!-- ClothTable.vue -->
 <template>
-  <div class="border rounded-lg mt-4" v-if="clothesList.length > 0">
-    <div class="flex px-3 py-3.5 border-b border-slate200 dark:border-slate700">
+  <div class="border border-primary rounded-lg mt-4" v-if="clothesList.length > 0">
+    <div class="flex px-3 py-3.5 border-b border-primary dark:border-primary">
       <USelectMenu
         v-model="selectedColumns"
         :options="columns"

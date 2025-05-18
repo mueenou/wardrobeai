@@ -12,15 +12,20 @@ export default defineEventHandler(async (event) => {
     console.log(prompt);
 
     const response = await openai.images.generate({
-      model: "dall-e-3", // ou "dall-e-2" pour la version précédente
-      prompt: prompt,
-      n: 1, // nombre d'images à générer
-      quality: "standard", // "standard" ou "hd" pour dall-e-3
-      style: "natural", // "natural" ou "vivid" pour dall-e-3
+      model: "gpt-image-1",
+      prompt,
+      n: 1,
+      size: "1024x1536",
+      quality: "low",
+      // Do NOT include `response_format`, it's not supported
     });
 
-    return response;
+    const base64Image = response.data[0].b64_json;
+
+    // Return the base64 string so frontend can render it
+    return { image: `data:image/png;base64,${base64Image}` };
   } catch (error: any) {
+    console.error(error);
     throw createError({
       statusCode: 500,
       message: error.message,

@@ -1,5 +1,5 @@
 <template>
-  <UCard>
+  <UCard class="border border-primary">
     <template #header>
       <div class="flex gap-2 items-center font-bold">
         <UBadge class="font-bold min-w-[55px] grid place-content-center">{{
@@ -14,20 +14,22 @@
             :icon="isLoading ? 'eos-icons:three-dots-loading' : 'bi:stars'"
             @click="$emit('generateImage', day, outfit)"
           >
-            {{ isLoading ? "Generating" : "" }}
+            {{ isLoading ? "Generating" : "Generate look" }}
           </UButton>
         </UTooltip>
       </div>
     </template>
-    <div class="grid grid-cols-2 w-full items-center">
+    <div class="flex w-full items-center justify-between">
       <div class="flex gap-2">
         <p>{{ outfit["Style Theme"] }}</p>
         <p>{{ outfit["Weather"] }}</p>
         <p>{{ outfit["Accessories"] ? outfit["Accessories"] : "" }}</p>
       </div>
-      <div>
+      <div
+        v-if="outfit.imageUrl"
+        class="rounded ring-2 ring-primary overflow-hidden shadow w-[100px] h-[100px]"
+      >
         <img
-          v-if="outfit.imageUrl"
           :src="outfit.imageUrl"
           alt="Outfit"
           class="cursor-pointer"
