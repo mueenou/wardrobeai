@@ -4,7 +4,7 @@
   >
     <div class="flex h-full max-h-screen flex-col gap-2 sticky left-0">
       <div
-        class="flex h-[55px] items-center justify-between border-b dark:border-slate-800 px-3 w-full dark:bg-primary-950 z-10 bg-primary"
+        class="flex h-20 items-center justify-between border-b dark:border-slate-800 px-3 w-full dark:bg-primary-950 z-10 bg-primary"
       >
         <nuxt-link to="/">
           <h1 class="font-black text-2xl text-secondary dark:text-gray-100 uppercase">

@@ -9,8 +9,6 @@ export default defineEventHandler(async (event) => {
   try {
     const { prompt } = await readBody(event);
 
-    console.log(prompt);
-
     const response = await openai.images.generate({
       model: "gpt-image-1",
       prompt,

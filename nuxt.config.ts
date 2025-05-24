@@ -2,7 +2,13 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
-  modules: ["@nuxt/icon", "@nuxt/ui", "@pinia/nuxt", "@nuxtjs/supabase"],
+  modules: [
+    "@nuxt/icon",
+    "@nuxt/ui",
+    "@pinia/nuxt",
+    "@nuxtjs/supabase",
+    "@nuxt/fonts",
+  ],
   supabase: {
     redirect: true,
     redirectOptions: {

@@ -1,85 +1,37 @@
 <template>
-  <div class="w-full rounded-xl text-sm overflow-y-auto px-6 py-6">
-    <p class="font-medium text-lg text-primary">Clothes listing form</p>
-    <p class="dark:text-neutral-300 text-sm">
-      This is the place where you are going to tell us all the clothes you are bringing
-      with you
-    </p>
+  <div class="min-w-fit rounded-xl text-base overflow-y-auto px-6 py-6 relative">
+    <div class="flex items-center">
+      <p class="font-bold text-4xl text-primary">Clothes listing form</p>
+      <UTooltip
+        text="Tell us all the clothes you are bringing
+          with you"
+        :popper="{ placement: 'right' }"
+        :openDelay="300"
+      >
+        <Icon name="lucide:info" class="text-primary" />
+      </UTooltip>
+    </div>
     <UDivider class="my-2" />
     <form @submit.prevent>
-      <!-- <URadioGroup
-        @change="outfitStore.updateSexe($event)"
-        legend="What is your gender?"
-        :options="sexeOptions"
-        :model-value="sexe"
-      /> -->
-      <div class="flex gap-4 w-fit mx-auto items-center">
-        <UFormGroup label="What is your gender?" size="sm" class="my-2">
+      <div class="flex flex-col gap-4 w-fit items-center mx-auto">
+        <UFormGroup size="lg" class="my-2">
+          <UTooltip text="Ethnicity" :popper="{ placement: 'right' }" :openDelay="300">
+            <UInputMenu
+              color="primary"
+              @change="outfitStore.updateEthnicity($event)"
+              :value="ethnicity"
+              :options="ethnicities"
+            />
+          </UTooltip>
+        </UFormGroup>
+        <UFormGroup size="sm" class="my-2">
           <GenderSelector v-model="sexe" />
         </UFormGroup>
-        <UFormGroup label="Ethnicity" size="sm" class="my-2">
-          <UInputMenu
-            color="primary"
-            @change="outfitStore.updateEthnicity($event)"
-            :value="ethnicity"
-            :options="ethnicities"
-          />
-        </UFormGroup>
       </div>
-      <UFormGroup label="Clothing type" size="sm" class="my-2">
-        <!-- <UInputMenu
-          color="primary"
-          v-model="selectedClothingType"
-          :options="clothingTypes"
-          icon="mingcute:t-shirt-fill"
-        /> -->
-        <ClothImageInput v-model="selectedClothingType" />
-      </UFormGroup>
-      <UFormGroup label="Cloth color" size="sm" class="my-2">
-        <!-- <UInputMenu
-          color="primary"
-          v-model="selectedColor"
-          :options="clothingColors"
-          placeholder="Select a person"
-          by="id"
-          option-attribute="name"
-          :search-attributes="['name', 'color']"
-        >
-          <template #option="{ option: set }">
-            <span :class="`h-3 w-8 rounded`" :style="`background-color: ${set.hex}`" />
-            <span class="truncate">{{ set.name }}</span>
-          </template>
-        </UInputMenu> -->
-        <ColorSelector v-model="selectedColor" />
-      </UFormGroup>
-      <div class="flex flex-wrap gap-x-4 items-center">
-        <UFormGroup label="Clothing fabric" size="sm" class="my-2">
-          <UInputMenu
-            color="primary"
-            v-model="selectedFabric"
-            :options="clothingFabrics"
-            icon="mdi:fabric"
-          />
-        </UFormGroup>
-        <!-- <UFormGroup label="Weather suitability" size="sm" class="my-2">
-        <UInputMenu
-          color="primary"
-          v-model="selectedWeatherSuitability"
-          :options="weatherSuitability"
-          icon="material-symbols:matter"
-        />
-      </UFormGroup> -->
-        <UFormGroup label="Style" size="sm" class="my-2">
-          <UInputMenu
-            color="primary"
-            v-model="selectedStyleTag"
-            :options="styleTags"
-            icon="material-symbols:style"
-          />
-        </UFormGroup>
+      <div class="flex gap-4 w-fit items-center">
         <UFormGroup label="Destination (optional)" size="sm" class="my-2">
           <UInput
-            @input="outfitStore.updateDestination($event.target.value)"
+            v-model="destination"
             placeholder="Where are you going?"
             color="primary"
           />
@@ -107,82 +59,49 @@
           </UPopover>
         </UFormGroup>
       </div>
-      <div class="flex gap-x-4"></div>
-      <div class="w-full justify-end text-right">
-        <UButton
-          @click="addClothToList"
-          label="Add cloth"
-          color="indigo"
-          variant="outline"
-          size="md"
-          class="mt-2"
-        />
-      </div>
+      <UButton label="Add new cloth" @click="isOpen = true" />
+
+      <UModal v-model="isOpen" :ui="{ base: 'sm:max-w-4xl' }">
+        <UCard
+          :ui="{
+            base: 'w-full',
+            ring: '',
+            divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+          }"
+        >
+          <ClothingModal @submitted="isOpen = false" />
+        </UCard>
+      </UModal>
     </form>
     <ClothTable v-model="clothesList" />
-    <div class="text-right" v-if="clothesList.length > 0">
-      <UButton
-        label="Submit"
-        color="indigo"
-        variant="outline"
-        size="md"
-        class="mt-4"
-        @click="$emit('generate')"
-      />
-    </div>
+    <UButton
+      v-if="clothesList.length > 0"
+      label="Submit"
+      color="indigo"
+      variant="outline"
+      size="md"
+      class="mt-2 absolute bottom-2 right-6 bg-gray-900"
+      @click="$emit('generate')"
+    />
   </div>
 </template>
 
 <script setup>
-import { storeToRefs } from "pinia";
 import { useOutfitStore } from "~/stores/outfit";
-import { CLOTHING_TYPES } from "~/constants/clothing";
-import { CLOTHING_COLORS } from "~/constants/clothing";
-import { FABRICS } from "~/constants/clothing";
-// import { WEATHER_SUITABILITY } from "~/constants/clothing";
-import { STYLE_TAGS } from "~/constants/clothing";
 import { ETHNICITIES } from "~/constants/clothing";
 import { format } from "date-fns";
 
+const isOpen = ref(false);
+
 const outfitStore = useOutfitStore();
-const { clothesList, sexe, ethnicity, tripDates } = storeToRefs(outfitStore);
+const { clothesList, sexe, ethnicity, tripDates, destination } = storeToRefs(outfitStore);
 const emit = defineEmits(["generate"]);
+
+const ethnicities = ETHNICITIES;
 
 // update the trip dates in the store
 const selected = computed({
   get: () => tripDates.value,
   set: (newDates) => outfitStore.updateTripDates(newDates),
 });
-
-// Constantes pour les options des selects
-const clothingFabrics = FABRICS;
-const ethnicities = ETHNICITIES;
-// const weatherSuitability = WEATHER_SUITABILITY;
-const styleTags = STYLE_TAGS;
-
-// Refs pour le formulaire
-const selectedClothingType = ref(CLOTHING_TYPES[0]);
-const selectedColor = ref(CLOTHING_COLORS[0]);
-const selectedFabric = ref(FABRICS[0]);
-// const selectedWeatherSuitability = ref(WEATHER_SUITABILITY[0]);
-const selectedStyleTag = ref(STYLE_TAGS[0]);
-
-const toast = useToast();
-// Fonction pour ajouter un vêtement
-const addClothToList = () => {
-  const cloth = {
-    id: clothesList.value.length + 1,
-    type: selectedClothingType.value,
-    color: selectedColor.value,
-    fabric: selectedFabric.value,
-    style: selectedStyleTag.value,
-  };
-  outfitStore.addCloth(cloth);
-  toast.add({
-    title: "Cloth added",
-    description: `A <b>${selectedClothingType.value}</b> color <b>${selectedColor.value.name}</b> was added to the list.`,
-    timeout: 3000,
-    icon: "i-bx-check",
-  });
-};
 </script>
