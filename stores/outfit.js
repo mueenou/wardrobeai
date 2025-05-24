@@ -35,7 +35,6 @@ export const useOutfitStore = defineStore("outfit", {
       this.ethnicity = value;
     },
     updateTripDates(dates) {
-      console.log(dates);
       this.tripDates = dates;
       const startDate = new Date(dates.start);
       const endDate = new Date(dates.end);
@@ -134,6 +133,8 @@ export const useOutfitStore = defineStore("outfit", {
         destination: this.destination,
         outfit_suggestions: this.outfitSuggestions,
         user_id: user.id,
+        sexe: this.sexe,
+        ethnicity: this.ethnicity,
       };
       userStore.addTrip(trip);
     },
@@ -158,6 +159,8 @@ export const useOutfitStore = defineStore("outfit", {
             end_date: this.tripDates.end,
             destination: this.destination,
             outfit_suggestions: this.outfitSuggestions,
+            sexe: this.sexe,
+            ethnicity: this.ethnicity,
           };
           userStore.addTrip(trip);
           await fetch("/api/add-trip", {
@@ -190,13 +193,43 @@ export const useOutfitStore = defineStore("outfit", {
           body: { prompt: imagePrompt },
         });
 
+        // Upload the base64 image to Supabase storage
+        const uploadResponse = await $fetch("/api/upload-outfit-image", {
+          method: "POST",
+          body: {
+            image: response.image,
+            tripId: this.tripData.id,
+            day: day,
+          },
+        });
+
         this.updateOutfit(day, {
           ...outfit,
-          imageUrl: response.image,
+          imageUrl: uploadResponse.imageUrl,
         });
       } catch (error) {
         console.error("Error generating outfit image:", error);
         throw error;
+      }
+    },
+
+    setTripData(tripData) {
+      this.destination = tripData.destination;
+      this.tripDates = {
+        start: new Date(tripData.start_date),
+        end: new Date(tripData.end_date),
+      };
+      this.sexe = tripData.sexe;
+      this.ethnicity = tripData.ethnicity;
+      // Update number of days based on the trip dates
+      const startDate = new Date(tripData.start_date);
+      const endDate = new Date(tripData.end_date);
+      const diffTime = Math.abs(endDate - startDate);
+      this.numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+      // If there are outfit suggestions, set them
+      if (tripData.outfit_suggestions) {
+        this.outfitSuggestions = tripData.outfit_suggestions;
       }
     },
   },

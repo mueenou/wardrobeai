@@ -17,7 +17,9 @@
                 format(new Date(trip.end_date), "EEEE, MMMM d, yyyy")
               }}</span>
             </p>
-            <UButton class="block" label="See details..." variant="ghost" />
+            <NuxtLink :to="`/trip/${trip.id}`">
+              <UButton class="block" label="See details..." variant="ghost" />
+            </NuxtLink>
           </div>
         </template>
       </UCard>
@@ -34,7 +36,6 @@ definePageMeta({
   layout: "registered-layout",
 });
 const userStore = useUserStore();
-// const { trips } = storeToRefs(userStore);
 
 const { data: trips } = await useFetch("/api/get-trips");
 </script>

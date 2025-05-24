@@ -17,7 +17,7 @@
       v-model="clothesFilter"
     />
     <div
-      class="flex gap-2 flex-wrap max-h-[300px] w-[675px] overflow-y-auto p-2 pb-8 border border-primary rounded"
+      class="flex gap-2 flex-wrap max-h-[300px] overflow-y-auto p-2 pb-8 border border-primary rounded"
     >
       <div
         class="border w-[100px] h-[100px] rounded flex flex-col items-center gap-y-1 justify-center hover:border-primary cursor-pointer"

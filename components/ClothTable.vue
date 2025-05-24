@@ -39,7 +39,9 @@
       </template>
     </UTable>
   </div>
-  <div v-else class="text-center py-4 text-slate500">No items available.</div>
+  <div v-else class="text-center py-4 text-slate-500">
+    No items available in your luggage.
+  </div>
 </template>
 
 <script setup>
