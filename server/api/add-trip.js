@@ -16,6 +16,8 @@ export default defineEventHandler(async (event) => {
         destination: body.destination,
         clothes_list: body.clothes_list,
         outfit_suggestions: body.outfit_suggestions,
+        sexe: body.sexe,
+        ethnicity: body.ethnicity,
       })
       .select();
     if (error) {

@@ -9,7 +9,6 @@ export const useUserStore = defineStore("user", {
   actions: {
     addTrip(trip) {
       this.trips.push(trip);
-      console.log(this.trips);
     },
     removeTrip(id) {
       this.trips = this.trips.filter((trip) => trip.id !== id);

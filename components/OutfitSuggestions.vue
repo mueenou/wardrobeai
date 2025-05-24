@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full rounded-xl pl-4 flex flex-col gap-y-4 text-sm overflow-y-auto pr-4 py-2 relative"
+    class="w-full rounded-xl pl-4 flex flex-col gap-y-4 overflow-y-auto pr-4 py-2 relative"
   >
     <div
       v-if="isLoading"
@@ -22,7 +22,7 @@
       />
     </template>
 
-    <div v-else>No outfit suggestions available.</div>
+    <div v-else class="text-slate-500">No outfit suggestions available.</div>
 
     <ImageSlideViewer
       v-model="isSliderOpen"

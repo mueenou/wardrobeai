@@ -1,11 +1,11 @@
 <template>
-  <UCard class="border border-primary">
+  <UCard class="hover:ring hover:ring-primary duration-300">
     <template #header>
       <div class="flex gap-2 items-center font-bold">
         <UBadge class="font-bold min-w-[55px] grid place-content-center">{{
           day
         }}</UBadge>
-        <p class="text-xs flex-grow">{{ outfit.Outfit }}</p>
+        <p class="flex-grow">{{ outfit.Outfit }}</p>
         <UTooltip text="See how it looks in an image!">
           <UButton
             size="2xs"
@@ -39,7 +39,9 @@
     </div>
     <template #footer>
       <div class="flex gap-x-2 w-full justify-end">
-        <UBadge color="blue" v-for="pf in outfit['Perfect for']">{{ pf }}</UBadge>
+        <UBadge color="blue" class="font-bold" v-for="pf in outfit['Perfect for']">{{
+          pf
+        }}</UBadge>
       </div>
     </template>
   </UCard>
