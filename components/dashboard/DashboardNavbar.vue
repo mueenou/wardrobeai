@@ -3,6 +3,11 @@
     <header
       class="flex min-h-14 lg:min-h-20 items-center gap-4 border-b dark:border-slate-800 px-6 sticky top-0 dark:bg-primary-950 z-10 bg-primary"
     >
+      <Icon
+        name="lucide:menu"
+        class="lg:hidden text-2xl cursor-pointer"
+        @click="uiStore.toggleSideBar"
+      />
       <div class="flex items-center w-full justify-end">
         <ClientOnly>
           <UTooltip :text="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
@@ -27,6 +32,8 @@
 </template>
 
 <script setup>
+import { useUiStore } from "~/stores/ui";
+const uiStore = useUiStore();
 const route = useRoute();
 const colorMode = useColorMode();
 const isDark = computed({

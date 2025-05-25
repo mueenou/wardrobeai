@@ -1,17 +1,32 @@
 <template>
+  <!-- Backdrop for mobile -->
   <div
-    class="lg:block hidden border-r dark:border-slate-800 h-screen sticky left-0 top-0 z-10"
+    v-if="uiStore.showSideBar"
+    class="fixed inset-0 bg-black/50 z-20 lg:hidden"
+    @click="uiStore.toggleSideBar"
+  ></div>
+  <div
+    class="border-r dark:border-slate-800 h-screen left-0 top-0 fixed lg:sticky lg:block z-30 w-[300px] bg-white dark:bg-background transition-transform duration-300"
+    :class="[
+      uiStore.showSideBar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+    ]"
   >
     <div class="flex h-full max-h-screen flex-col gap-2 sticky left-0">
       <div
         class="flex h-20 items-center justify-between border-b dark:border-slate-800 px-3 w-full dark:bg-primary-950 z-10 bg-primary"
       >
-        <nuxt-link
-          to="/"
-          class="mx-auto font-black text-2xl text-secondary dark:text-gray-100 uppercase"
-        >
-          <h1>Wardrobe.AI</h1>
+        <nuxt-link to="/" class="mx-auto">
+          <h1 class="font-black text-2xl text-secondary dark:text-gray-100 uppercase">
+            Wardrobe.AI
+          </h1>
         </nuxt-link>
+        <!-- Close button for mobile -->
+
+        <Icon
+          name="lucide:x"
+          class="text-2xl text-secondary dark:text-gray-100 lg:hidden p-2 hover:bg-primary-100 dark:hover:bg-primary-900 rounded-lg"
+          @click="uiStore.toggleSideBar"
+        />
       </div>
       <div class="flex-1 overflow-auto py-2">
         <nav
@@ -72,6 +87,8 @@
 </template>
 
 <script setup>
+import { useUiStore } from "~/stores/ui";
+const uiStore = useUiStore();
 const user = useSupabaseUser();
 const client = useSupabaseClient();
 const route = useRoute();

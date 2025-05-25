@@ -7,7 +7,6 @@
         <UFormGroup label="Email" name="email">
           <UInput v-model="email" />
         </UFormGroup>
-
         <UFormGroup label="Password" name="password">
           <UInput v-model="password" type="password" />
         </UFormGroup>
@@ -15,13 +14,7 @@
         <p>{{ errorMsg }}</p>
         <p>{{ successMsg }}</p>
 
-        <UButton type="submit" color="teal" block> Submit </UButton>
-        <UButton block color="white" variant="outline" icon="i-mdi:github">
-          GitHub
-        </UButton>
-        <UButton block color="white" variant="outline" icon="i-mdi:google">
-          Google
-        </UButton>
+        <UButton type="submit" color="primary" block> Submit </UButton>
         <p class="text-center text-sm">
           Already have an account?
           <span><nuxt-link to="/login" class="underline">Login</nuxt-link></span>
