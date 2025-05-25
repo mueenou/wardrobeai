@@ -80,7 +80,7 @@
       color="indigo"
       variant="outline"
       size="md"
-      class="mt-2 absolute bottom-2 right-6 bg-gray-900"
+      class="mt-2 absolute bottom-2 right-6"
       @click="$emit('generate')"
     />
   </div>

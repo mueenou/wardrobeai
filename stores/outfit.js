@@ -16,6 +16,8 @@ export const useOutfitStore = defineStore("outfit", {
     destination: "",
     outfitSuggestions: null,
     isLoading: false,
+    currentTripId: null,
+    loadingOutfits: new Map(),
   }),
 
   actions: {
@@ -163,11 +165,15 @@ export const useOutfitStore = defineStore("outfit", {
             ethnicity: this.ethnicity,
           };
           userStore.addTrip(trip);
-          await fetch("/api/add-trip", {
+          const result = await fetch("/api/add-trip", {
             method: "POST",
             body: JSON.stringify(trip),
             headers: { "Content-Type": "application/json" },
           });
+          const data = await result.json();
+          const newTrip = data[0];
+          this.currentTripId = newTrip.id;
+          return newTrip;
         }
       } catch (error) {
         throw error;
@@ -186,6 +192,9 @@ export const useOutfitStore = defineStore("outfit", {
 
     async generateOutfitImage(day, outfit) {
       try {
+        // Set loading state for this specific outfit
+        this.loadingOutfits.set(day, true);
+
         const imagePrompt = this.createImagePrompt(outfit);
 
         const response = await $fetch("/api/generate-image", {
@@ -198,18 +207,34 @@ export const useOutfitStore = defineStore("outfit", {
           method: "POST",
           body: {
             image: response.image,
-            tripId: this.tripData.id,
+            tripId: this.currentTripId,
             day: day,
           },
         });
 
-        this.updateOutfit(day, {
+        // Update the outfit with the new image URL
+        const updatedOutfit = {
           ...outfit,
           imageUrl: uploadResponse.imageUrl,
+        };
+
+        // Update the outfit in the store
+        this.updateOutfit(day, updatedOutfit);
+
+        // Update the outfit suggestions in the database
+        await $fetch("/api/update-outfit", {
+          method: "POST",
+          body: {
+            tripId: this.currentTripId,
+            outfitSuggestions: this.outfitSuggestions,
+          },
         });
       } catch (error) {
         console.error("Error generating outfit image:", error);
         throw error;
+      } finally {
+        // Clear loading state for this outfit
+        this.loadingOutfits.set(day, false);
       }
     },
 
@@ -221,6 +246,7 @@ export const useOutfitStore = defineStore("outfit", {
       };
       this.sexe = tripData.sexe;
       this.ethnicity = tripData.ethnicity;
+      this.currentTripId = tripData.id;
       // Update number of days based on the trip dates
       const startDate = new Date(tripData.start_date);
       const endDate = new Date(tripData.end_date);

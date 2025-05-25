@@ -12,7 +12,9 @@
             variant="outline"
             class="self-end"
             :icon="isLoading ? 'eos-icons:three-dots-loading' : 'bi:stars'"
-            @click="$emit('generateImage', day, outfit)"
+            :loading="isLoading"
+            :disabled="isLoading"
+            @click="handleGenerateImage"
           >
             {{ isLoading ? "Generating" : "Generate look" }}
           </UButton>
@@ -32,7 +34,7 @@
         <img
           :src="outfit.imageUrl"
           alt="Outfit"
-          class="cursor-pointer"
+          class="cursor-pointer w-full h-full object-cover"
           @click="handleShowImage(outfit.imageUrl)"
         />
       </div>
@@ -48,15 +50,30 @@
 </template>
 
 <script setup>
+import { useOutfitStore } from '~/stores/outfit';
+
 const props = defineProps({
   day: String,
   outfit: Object,
   isLoading: Boolean,
+  tripId: {
+    type: String,
+    required: true
+  }
 });
 
 const emit = defineEmits(["generateImage", "showImage"]);
+const outfitStore = useOutfitStore();
 
 const handleShowImage = (imageUrl) => {
   emit("showImage", imageUrl);
+};
+
+const handleGenerateImage = async () => {
+  try {
+    emit("generateImage", props.day, props.outfit);
+  } catch (error) {
+    console.error("Error generating image:", error);
+  }
 };
 </script>
