@@ -3,7 +3,7 @@
   <div class="mx-auto flex flex-col h-full mb-8 md:flex-row">
     <ClothingForm @generate="handleGenerate" />
     <UDivider orientation="vertical" type="dashed" />
-    <OutfitSuggestions />
+    <OutfitSuggestions v-if="currentTripId" :trip-id="currentTripId" />
   </div>
 </template>
 
@@ -15,6 +15,7 @@ definePageMeta({
 
 const store = useOutfitStore();
 const toast = useToast();
+const currentTripId = ref(null);
 
 const handleGenerate = async () => {
   if (store.destination === "" || store.sexe === "") {
@@ -36,7 +37,10 @@ const handleGenerate = async () => {
       timeout: 3000,
     });
 
-    await store.generateOutfits();
+    const result = await store.generateOutfits();
+    if (result?.id) {
+      currentTripId.value = result.id;
+    }
 
     toast.add({
       severity: "info",
