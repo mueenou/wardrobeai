@@ -15,13 +15,7 @@
         <p>{{ errorMsg }}</p>
         <p>{{ successMsg }}</p>
 
-        <UButton type="submit" color="teal" block> Submit </UButton>
-        <UButton block color="white" variant="outline" icon="i-mdi:github">
-          GitHub
-        </UButton>
-        <UButton block color="white" variant="outline" icon="i-mdi:google">
-          Google
-        </UButton>
+        <UButton type="submit" color="primary" block> Submit </UButton>
         <p class="text-center text-sm">
           Don't have an account?
           <span><nuxt-link to="/register" class="underline">Register</nuxt-link></span>
