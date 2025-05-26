@@ -2,16 +2,17 @@ import { createError } from "h3";
 import { serverSupabaseUser, serverSupabaseClient } from "#supabase/server";
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  console.log(body);
+  const { tripId, outfitSuggestions } = await readBody(event);
   const client = await serverSupabaseClient(event);
   const user = await serverSupabaseUser(event);
+
   try {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from("trips")
-      .update({ outfit_suggestions: updatedOutfitSuggestions })
+      .update({ outfit_suggestions: outfitSuggestions })
       .eq("id", tripId)
       .select();
+
     if (error) {
       throw createError({ statusMessage: error.message });
     }

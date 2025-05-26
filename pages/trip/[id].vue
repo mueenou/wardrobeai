@@ -66,56 +66,7 @@
         <template #header>
           <h2 class="text-xl font-bold">Outfit Suggestions</h2>
         </template>
-        <div class="flex flex-col gap-6">
-          <div
-            v-for="(outfit, day) in trip.outfit_suggestions"
-            :key="day"
-            class="rounded-lg p-4 shadow border border-gray-800"
-          >
-            <h3 class="text-base font-bold mb-2">{{ day }}</h3>
-            <div class="grid md:grid-cols-2 gap-4 items-center">
-              <div class="flex flex-col gap-2 items-start">
-                <p><span class="font-semibold">Outfit:</span> {{ outfit.Outfit }}</p>
-                <p>
-                  <span class="font-semibold">Style Theme:</span>
-                  {{ outfit["Style Theme"] }}
-                </p>
-                <p>
-                  <span class="font-semibold">Perfect for:</span>
-                </p>
-                <div class="flex flex-wrap gap-2">
-                  <UBadge
-                    v-for="activity in outfit['Perfect for']"
-                    :key="activity"
-                    color="gray"
-                    class="text-xs"
-                  >
-                    {{ activity }}
-                  </UBadge>
-                </div>
-                <UButton
-                  v-if="!outfit.imageUrl"
-                  @click="generateImage(day, outfit)"
-                  :loading="loadingImages[day]"
-                  color="primary"
-                  class="mt-2"
-                >
-                  Generate Image
-                </UButton>
-              </div>
-              <div v-if="outfit.imageUrl" class="flex justify-center">
-                <div v-if="outfit.imageUrl" class="mt-2">
-                  <img
-                    :src="outfit.imageUrl"
-                    :alt="`Outfit for day ${day}`"
-                    class="w-32 h-32 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                    @click="openImageModal(outfit.imageUrl)"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <OutfitSuggestions :trip-id="route.params.id" />
       </UCard>
     </div>
     <div v-else class="flex justify-center items-center h-full">
@@ -146,7 +97,6 @@ definePageMeta({
 
 const route = useRoute();
 const outfitStore = useOutfitStore();
-const loadingImages = ref({});
 const isModalOpen = ref(false);
 const selectedImage = ref(null);
 
@@ -163,24 +113,6 @@ watch(
   },
   { immediate: true }
 );
-
-const generateImage = async (day, outfit) => {
-  try {
-    loadingImages.value[day] = true;
-    await outfitStore.generateOutfitImage(day, outfit);
-    // Update the local trip data with the new image
-    if (trip.value?.outfit_suggestions) {
-      trip.value.outfit_suggestions[day] = {
-        ...outfit,
-        imageUrl: outfitStore.outfitSuggestions[day].imageUrl,
-      };
-    }
-  } catch (error) {
-    console.error("Error generating image:", error);
-  } finally {
-    loadingImages.value[day] = false;
-  }
-};
 
 const openImageModal = (imageUrl) => {
   selectedImage.value = imageUrl;
