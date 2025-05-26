@@ -7,16 +7,30 @@
             <UBadge class="font-bold min-w-[55px] grid place-content-center text-md"
               >Trip to {{ trip.destination }}</UBadge
             >
-            <p class="text-sm flex-grow">
-              From the
+            <UBadge
+              :color="new Date(trip.start_date) > new Date() ? 'green' : 'gray'"
+              variant="soft"
+              class="ml-2"
+            >
+              {{ new Date(trip.start_date) > new Date() ? "Upcoming" : "Past" }}
+            </UBadge>
+            <p class="text-sm flex-grow flex items-center gap-2">
               <span class="text-primary">{{
-                format(new Date(trip.start_date), "EEEE, MMMM d, yyyy")
+                format(new Date(trip.start_date), "MMM d")
               }}</span>
-              to
+              <Icon name="lucide:arrow-right" class="inline-block" />
               <span class="text-primary">{{
-                format(new Date(trip.end_date), "EEEE, MMMM d, yyyy")
+                format(new Date(trip.end_date), "MMM d, yyyy")
               }}</span>
             </p>
+            <div class="flex gap-2 items-center">
+              <UBadge v-if="trip.sexe" color="gray" variant="soft">{{
+                trip.sexe
+              }}</UBadge>
+              <UBadge v-if="trip.ethnicity" color="gray" variant="soft">{{
+                trip.ethnicity
+              }}</UBadge>
+            </div>
             <NuxtLink :to="`/trip/${trip.id}`">
               <UButton class="block" label="See details..." variant="ghost" />
             </NuxtLink>
