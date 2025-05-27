@@ -46,7 +46,7 @@
           class="my-2"
         >
           <UPopover :popper="{ placement: 'bottom-start' }">
-            <UButton icon="i-heroicons-calendar-days-20-solid">
+            <UButton icon="lucide:calendar-days">
               {{ format(selected.start, "d MMM, yyy") }} -
               {{ format(selected.end, "d MMM, yyy") }}
             </UButton>
@@ -63,9 +63,14 @@
       </div>
       <UButton label="Add new cloth" @click="isOpen = true" />
 
-      <UModal v-model="isOpen" :ui="{ base: 'sm:max-w-4xl' }">
-        <ClothingModal @submitted="isOpen = false" />
-      </UModal>
+      <div
+        v-if="isOpen"
+        class="fixed top-0 left-0 w-full h-full flex items-center justify-center"
+      >
+        <UModal v-model="isOpen" :ui="{ base: 'sm:max-w-6xl' }">
+          <ClothingModal @submitted="isOpen = false" />
+        </UModal>
+      </div>
     </form>
     <ClothTable v-model="clothesList" />
     <UButton

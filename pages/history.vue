@@ -43,7 +43,7 @@
                 }}</UBadge>
                 <UBadge v-if="trip.outfit_suggestions" color="primary" variant="soft">
                   <div class="flex items-center gap-1">
-                    <Icon name="i-heroicons-photo" class="w-4 h-4" />
+                    <Icon name="lucide:image" class="w-4 h-4" />
                     {{
                       Object.values(trip.outfit_suggestions).filter(
                         (outfit) => outfit.imageUrl
@@ -54,11 +54,7 @@
               </div>
               <div class="flex gap-2">
                 <NuxtLink :to="`/trip/${trip.id}`">
-                  <UButton
-                    icon="i-heroicons-arrow-right"
-                    color="primary"
-                    variant="ghost"
-                  />
+                  <UButton icon="lucide:arrow-right" color="primary" variant="ghost" />
                 </NuxtLink>
               </div>
             </div>
@@ -126,7 +122,7 @@
               v-else
               class="flex flex-col items-center justify-center py-8 text-gray-500 gap-2"
             >
-              <Icon name="i-heroicons-photo" class="w-12 h-12" />
+              <Icon name="lucide:image" class="w-12 h-12" />
               <p>No images generated for this trip yet</p>
               <p class="text-sm">
                 Click on "Generate look" in the trip details to create images
@@ -146,7 +142,7 @@
     <!-- Scroll to top button -->
     <UButton
       v-if="showScrollTop"
-      icon="i-heroicons-arrow-up"
+      icon="lucide:arrow-up"
       color="primary"
       variant="solid"
       class="fixed bottom-4 right-4 lg:hidden rounded-full shadow-lg"
@@ -169,7 +165,7 @@ import { format } from "date-fns";
 
 definePageMeta({
   layout: "registered-layout",
-  middleware: ["auth", "onboarding"]
+  middleware: ["auth", "onboarding"],
 });
 
 const userStore = useUserStore();
