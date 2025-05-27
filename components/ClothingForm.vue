@@ -14,19 +14,21 @@
     <UDivider class="my-2" />
     <form @submit.prevent>
       <div class="flex flex-col gap-4 w-fit items-center mx-auto">
-        <UFormGroup size="lg" class="my-2">
-          <UTooltip text="Ethnicity" :popper="{ placement: 'right' }" :openDelay="300">
-            <UInputMenu
-              color="primary"
-              @change="outfitStore.updateEthnicity($event)"
-              :value="ethnicity"
-              :options="ethnicities"
-            />
-          </UTooltip>
-        </UFormGroup>
-        <UFormGroup size="sm" class="my-2">
-          <GenderSelector v-model="sexe" />
-        </UFormGroup>
+        <!-- User Preferences Display -->
+        <div class="flex gap-6 items-center p-4 rounded-lg">
+          <div class="flex items-center gap-2 bg-primary/10 py-2 px-4 rounded-full">
+            <Icon name="lucide:user" class="text-primary" />
+            <span class="font-medium">Gender:</span>
+            <span class="text-gray-600 dark:text-gray-300 font-bold">{{ sexe }}</span>
+          </div>
+          <div class="flex items-center gap-2 bg-primary/10 py-2 px-4 rounded-full">
+            <Icon name="lucide:globe" class="text-primary" />
+            <span class="font-medium">Ethnicity:</span>
+            <span class="text-gray-600 dark:text-gray-300 font-bold">{{
+              ethnicity
+            }}</span>
+          </div>
+        </div>
       </div>
       <div class="flex gap-4 w-fit items-center">
         <UFormGroup label="Destination (optional)" size="sm" class="my-2">
@@ -61,10 +63,10 @@
       </div>
       <UButton label="Add new cloth" @click="isOpen = true" />
 
-      <UModal v-model="isOpen" :ui="{ base: 'sm:max-w-4xl' }">
+      <UModal v-model="isOpen" :ui="{ base: 'sm:max-w-5xl' }">
         <UCard
           :ui="{
-            base: 'w-full',
+            base: 'w-full h-full',
             ring: '',
             divide: 'divide-y divide-gray-100 dark:divide-gray-800',
           }"

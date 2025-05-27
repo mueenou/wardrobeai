@@ -1,59 +1,58 @@
 <template>
   <div class="w-full h-full p-4">
-    <UCard>
-      <template #header>
-        <div class="flex items-center justify-between">
-          <h2 class="text-xl font-bold">Profile Settings</h2>
-          <UButton
-            v-if="hasChanges"
-            color="primary"
-            @click="saveChanges"
-            :loading="isSaving"
-          >
-            Save Changes
-          </UButton>
-        </div>
-      </template>
+    <div class="space-y-6">
+      <!-- Header Section -->
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold">Profile Settings</h2>
+        <UButton
+          :color="hasChanges ? 'primary' : 'gray'"
+          @click="saveChanges"
+          :loading="isSaving"
+          :disabled="!hasChanges"
+        >
+          Save Changes
+        </UButton>
+      </div>
 
-      <div class="space-y-6">
-        <!-- User Info Section -->
-        <div class="space-y-4">
-          <h3 class="text-lg font-semibold">Personal Information</h3>
-          <div class="flex items-center gap-4">
-            <UAvatar
-              size="xl"
-              src="https://avatars.githubusercontent.com/u/739984?v=4"
-              alt="Avatar"
-            />
-            <div class="space-y-2">
-              <UFormGroup label="Username" name="username">
-                <UInput v-model="username" placeholder="Enter your username" />
-              </UFormGroup>
-              <p class="font-medium">{{ user?.email }}</p>
-              <p class="text-sm text-gray-500">Member since {{ formatDate(user?.created_at) }}</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Preferences Section -->
-        <div class="space-y-4">
-          <h3 class="text-lg font-semibold">Preferences</h3>
-          <div class="grid gap-4">
-            <UFormGroup label="Gender" name="gender">
-              <GenderSelector v-model="userPreferences.gender" />
+      <!-- User Info Section -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold">Personal Information</h3>
+        <div class="flex items-center gap-4">
+          <UAvatar
+            size="xl"
+            src="https://avatars.githubusercontent.com/u/739984?v=4"
+            alt="Avatar"
+          />
+          <div class="space-y-2">
+            <UFormGroup label="Username" name="username">
+              <UInput v-model="username" placeholder="Enter your username" />
             </UFormGroup>
-
-            <UFormGroup label="Ethnicity" name="ethnicity">
-              <UInputMenu
-                v-model="userPreferences.ethnicity"
-                :options="ethnicities"
-                color="primary"
-              />
-            </UFormGroup>
+            <p class="font-medium">{{ user?.email }}</p>
+            <p class="text-sm text-gray-500">
+              Member since {{ formatDate(user?.created_at) }}
+            </p>
           </div>
         </div>
       </div>
-    </UCard>
+
+      <!-- Preferences Section -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold">Preferences</h3>
+        <div class="grid gap-4">
+          <UFormGroup label="Gender" name="gender">
+            <GenderSelector v-model="userPreferences.gender" />
+          </UFormGroup>
+
+          <UFormGroup label="Ethnicity" name="ethnicity">
+            <UInputMenu
+              v-model="userPreferences.ethnicity"
+              :options="ethnicities"
+              color="primary"
+            />
+          </UFormGroup>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -75,13 +74,30 @@ const userPreferences = ref({
   ethnicity: "Western European",
 });
 
+// Add initial state tracking
+const initialUsername = ref("");
+const initialPreferences = ref({
+  gender: "",
+  ethnicity: "Western European",
+});
+
 const isSaving = ref(false);
 const hasChanges = ref(false);
 
 // Watch for changes in preferences and username
-watch([userPreferences, username], () => {
-  hasChanges.value = true;
-}, { deep: true });
+watch(
+  [userPreferences, username],
+  () => {
+    // Compare current values with initial values
+    const usernameChanged = username.value !== initialUsername.value;
+    const preferencesChanged =
+      userPreferences.value.gender !== initialPreferences.value.gender ||
+      userPreferences.value.ethnicity !== initialPreferences.value.ethnicity;
+
+    hasChanges.value = usernameChanged || preferencesChanged;
+  },
+  { deep: true }
+);
 
 // Format date helper
 const formatDate = (date) => {
@@ -102,15 +118,21 @@ const loadUserPreferences = async () => {
     if (error) throw error;
 
     if (data) {
-      userPreferences.value = {
+      const preferences = {
         gender: data.gender || "",
         ethnicity: data.ethnicity || "Western European",
       };
+      userPreferences.value = { ...preferences };
+      initialPreferences.value = { ...preferences };
     }
 
     // Load username from user metadata
-    const { data: { user: userData } } = await client.auth.getUser();
-    username.value = userData?.user_metadata?.username || "";
+    const {
+      data: { user: userData },
+    } = await client.auth.getUser();
+    const loadedUsername = userData?.user_metadata?.username || "";
+    username.value = loadedUsername;
+    initialUsername.value = loadedUsername;
   } catch (error) {
     console.error("Error loading user data:", error);
     toast.add({
@@ -127,9 +149,9 @@ const saveChanges = async () => {
   isSaving.value = true;
   try {
     // Update username in user metadata
-    if (username.value !== user.value.user_metadata?.username) {
+    if (username.value !== initialUsername.value) {
       const { error: updateError } = await client.auth.updateUser({
-        data: { username: username.value }
+        data: { username: username.value },
       });
       if (updateError) throw updateError;
     }
@@ -141,20 +163,25 @@ const saveChanges = async () => {
       .eq("user_id", user.value.id)
       .single();
 
-    const { error } = await client
-      .from("user_preferences")
-      .upsert({
+    const { error } = await client.from("user_preferences").upsert(
+      {
         id: existingData?.id,
         user_id: user.value.id,
         gender: userPreferences.value.gender,
         ethnicity: userPreferences.value.ethnicity,
-      }, {
-        onConflict: 'user_id'
-      });
+      },
+      {
+        onConflict: "user_id",
+      }
+    );
 
     if (error) throw error;
 
+    // Update initial values after successful save
+    initialUsername.value = username.value;
+    initialPreferences.value = { ...userPreferences.value };
     hasChanges.value = false;
+
     toast.add({
       severity: "success",
       summary: "Success",
@@ -166,7 +193,7 @@ const saveChanges = async () => {
     toast.add({
       severity: "error",
       summary: "Error",
-      description: `Failed to save profile: ${error.message || 'Unknown error'}`,
+      description: `Failed to save profile: ${error.message || "Unknown error"}`,
       timeout: 5000,
     });
   } finally {
@@ -180,4 +207,4 @@ onMounted(() => {
 });
 
 const ethnicities = ETHNICITIES;
-</script> 
+</script>

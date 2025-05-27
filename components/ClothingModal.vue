@@ -1,13 +1,15 @@
 <template>
-  <form>
-    <UFormGroup label="Clothing type" size="sm" class="my-2">
-      <ClothImageInput v-model="selectedClothingType" />
-    </UFormGroup>
-    <UFormGroup label="Cloth color" size="sm" class="my-2">
-      <ColorSelector v-model="selectedColor" />
-    </UFormGroup>
-    <div class="flex flex-wrap gap-x-[0.1rem] items-center">
-      <UFormGroup label="Clothing fabric" size="sm" class="my-2">
+  <form class="w-full p-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <UFormGroup label="Clothing type" size="sm">
+        <ClothImageInput v-model="selectedClothingType" />
+      </UFormGroup>
+      <UFormGroup label="Cloth color" size="sm">
+        <ColorSelector v-model="selectedColor" />
+      </UFormGroup>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+      <UFormGroup label="Clothing fabric" size="sm">
         <UInputMenu
           color="primary"
           v-model="selectedFabric"
@@ -15,7 +17,7 @@
           icon="mdi:fabric"
         />
       </UFormGroup>
-      <UFormGroup label="Style" size="sm" class="my-2">
+      <UFormGroup label="Style" size="sm">
         <UInputMenu
           color="primary"
           v-model="selectedStyleTag"
@@ -24,14 +26,13 @@
         />
       </UFormGroup>
     </div>
-    <div class="w-full justify-end text-right">
+    <div class="w-full justify-end text-right mt-6">
       <UButton
         @click="addClothToList"
         label="Add cloth"
         color="indigo"
         variant="outline"
         size="md"
-        class="mt-2"
       />
     </div>
   </form>
