@@ -62,6 +62,7 @@ import { ETHNICITIES } from "~/constants/clothing";
 
 definePageMeta({
   layout: "registered-layout",
+  middleware: ["auth", "onboarding"]
 });
 
 const user = useSupabaseUser();

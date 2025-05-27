@@ -10,7 +10,5 @@
 </template>
 
 <script setup>
-definePageMeta({
-  middleware: ["auth", "onboarding"]
-});
+// Layout components should not use definePageMeta
 </script>

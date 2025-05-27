@@ -9,6 +9,11 @@ export default defineNuxtConfig({
     "@nuxtjs/supabase",
     "@nuxt/fonts",
   ],
+  nitro: {
+    routeRules: {
+      "/**": { middleware: { override: true } },
+    },
+  },
   supabase: {
     redirect: true,
     redirectOptions: {
@@ -22,7 +27,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       openaiApiKey: process.env.OPENAI_API_KEY, // Ajoutez votre clé OpenAI ici
-      goApi: process.env.GOAPI_KEY, // Ajoutez votre clé GoAPI ici
     },
   },
 });
