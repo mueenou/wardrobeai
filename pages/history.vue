@@ -169,6 +169,7 @@ import { format } from "date-fns";
 
 definePageMeta({
   layout: "registered-layout",
+  middleware: ["auth", "onboarding"]
 });
 
 const userStore = useUserStore();

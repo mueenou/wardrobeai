@@ -46,13 +46,13 @@
             >
               <h3 class="font-bold">{{ item.type }}</h3>
               <div class="flex items-center gap-2">
-                <p class="flex items-center gap-2">
+                <div class="flex items-center gap-2">
                   Color:
                   <div
                     class="w-4 h-4 rounded-full border border-gray-300"
                     :style="{ backgroundColor: item.color.hex || item.color.name.toLowerCase() }"
                   ></div>
-                </p>
+                </div>
               </div>
               <p>Fabric: {{ item.fabric }}</p>
               <p>Style: {{ item.style }}</p>
@@ -93,6 +93,7 @@ import { useOutfitStore } from "~/stores/outfit";
 
 definePageMeta({
   layout: "registered-layout",
+  middleware: ["auth", "onboarding"]
 });
 
 const route = useRoute();
