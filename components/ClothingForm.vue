@@ -104,4 +104,9 @@ const selected = computed({
   get: () => tripDates.value,
   set: (newDates) => outfitStore.updateTripDates(newDates),
 });
+
+// Load user preferences when component mounts
+onMounted(async () => {
+  await outfitStore.loadUserPreferences();
+});
 </script>

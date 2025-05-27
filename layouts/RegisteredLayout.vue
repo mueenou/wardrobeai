@@ -8,3 +8,9 @@
     <!-- Navbar -->
   </div>
 </template>
+
+<script setup>
+definePageMeta({
+  middleware: ["auth", "onboarding"]
+});
+</script>

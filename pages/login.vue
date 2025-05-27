@@ -37,13 +37,19 @@ async function signIn() {
   errorMsg.value = null;
   successMsg.value = null;
   try {
-    const { error } = await client.auth.signInWithPassword({
+    const { error, data } = await client.auth.signInWithPassword({
       email: email.value,
       password: password.value,
     });
     if (error) throw error;
+
+    // Wait a moment for the auth state to update
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Redirect to home page - middleware will handle the rest
     router.push("/");
   } catch (error) {
+    console.error("Login error:", error);
     errorMsg.value = error.message;
   }
 }
