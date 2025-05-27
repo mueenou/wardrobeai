@@ -21,21 +21,50 @@ export const useOutfitStore = defineStore("outfit", {
   }),
 
   actions: {
+    async loadUserPreferences() {
+      const user = useSupabaseUser();
+      const client = useSupabaseClient();
+
+      if (!user.value) return;
+
+      try {
+        const { data, error } = await client
+          .from("user_preferences")
+          .select("*")
+          .eq("user_id", user.value.id)
+          .single();
+
+        if (error) throw error;
+
+        if (data) {
+          this.sexe = data.gender || "";
+          this.ethnicity = data.ethnicity || "Western European";
+        }
+      } catch (error) {
+        console.error("Error loading user preferences:", error);
+      }
+    },
+
     updateClothesList(newList) {
       this.clothesList = newList;
     },
+
     addCloth(cloth) {
       this.clothesList.push(cloth);
     },
+
     removeCloth(id) {
       this.clothesList = this.clothesList.filter((cloth) => cloth.id !== id);
     },
+
     updateSexe(value) {
       this.sexe = value;
     },
+
     updateEthnicity(value) {
       this.ethnicity = value;
     },
+
     updateTripDates(dates) {
       this.tripDates = dates;
       const startDate = new Date(dates.start);
@@ -43,19 +72,9 @@ export const useOutfitStore = defineStore("outfit", {
       const diffTime = Math.abs(endDate - startDate);
       this.numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
     },
+
     updateDestination(value) {
       this.destination = value;
-    },
-    updateClothesList(newList) {
-      this.clothesList = newList;
-    },
-
-    addCloth(cloth) {
-      this.clothesList.push(cloth);
-    },
-
-    removeCloth(id) {
-      this.clothesList = this.clothesList.filter((cloth) => cloth.id !== id);
     },
 
     // Outfit management

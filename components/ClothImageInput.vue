@@ -7,15 +7,18 @@
         <p>Illustrations by flaticon.com</p>
       </nuxt-link>
     </div>
-    <UInput
-      placeholder="Search your cloth"
-      label="Submit"
-      color="indigo"
-      variant="outline"
-      size="sm"
-      class="my-2 w-fit"
-      v-model="clothesFilter"
-    />
+    <div class="flex items-center gap-2">
+      <UInput
+        placeholder="Search your cloth"
+        label="Submit"
+        color="indigo"
+        variant="outline"
+        size="sm"
+        class="my-2 w-fit"
+        v-model="clothesFilter"
+      />
+      <p class="text-sm text-primary font-medium">Type to search your cloth</p>
+    </div>
     <div
       class="flex gap-2 flex-wrap max-h-[300px] overflow-y-auto p-2 pb-8 border border-primary rounded"
     >
