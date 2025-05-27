@@ -11,7 +11,7 @@
             size="2xs"
             variant="outline"
             class="self-end"
-            :icon="isLoading ? 'eos-icons:three-dots-loading' : 'bi:stars'"
+            :icon="isLoading ? 'lucide:loader-2' : 'lucide:sparkles'"
             :loading="isLoading"
             :disabled="isLoading"
             @click="handleGenerateImage"

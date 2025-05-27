@@ -13,10 +13,10 @@
   >
     <div class="flex h-full max-h-screen flex-col gap-2 sticky left-0">
       <div
-        class="flex h-20 items-center justify-between border-b dark:border-slate-800 px-3 w-full dark:bg-primary-950 z-10 bg-primary"
+        class="flex h-20 items-center justify-between border-b dark:border-slate-800 px-3 w-full dark:bg-background z-10 bg-background"
       >
         <nuxt-link to="/" class="mx-auto">
-          <h1 class="font-black text-2xl text-secondary dark:text-gray-100 uppercase">
+          <h1 class="font-black text-2xl text-primary dark:text-gray-100 uppercase">
             Wardrobe.AI
           </h1>
         </nuxt-link>
@@ -24,7 +24,7 @@
 
         <Icon
           name="lucide:x"
-          class="text-2xl text-secondary dark:text-gray-100 lg:hidden p-2 hover:bg-primary-100 dark:hover:bg-primary-900 rounded-lg"
+          class="text-2xl dark:text-gray-100 lg:hidden p-2 hover:bg-primary-100 rounded-lg cursor-pointer text-primary"
           @click="uiStore.toggleSideBar"
         />
       </div>
