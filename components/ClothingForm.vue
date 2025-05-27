@@ -63,7 +63,7 @@
       </div>
       <UButton label="Add new cloth" @click="isOpen = true" />
 
-      <UModal v-model="isOpen" :ui="{ base: 'sm:max-w-5xl' }">
+      <UModal v-model="isOpen" :ui="{ base: 'sm:max-w-7xl' }">
         <UCard
           :ui="{
             base: 'w-full h-full',

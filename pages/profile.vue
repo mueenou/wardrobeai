@@ -15,7 +15,7 @@
       </div>
 
       <!-- User Info Section -->
-      <div class="space-y-4">
+      <div class="space-y-4 flex flex-col items-start">
         <h3 class="text-lg font-semibold">Personal Information</h3>
         <div class="flex items-center gap-4">
           <UAvatar
@@ -36,7 +36,7 @@
       </div>
 
       <!-- Preferences Section -->
-      <div class="space-y-4">
+      <div class="space-y-4 flex flex-col items-start">
         <h3 class="text-lg font-semibold">Preferences</h3>
         <div class="grid gap-4">
           <UFormGroup label="Gender" name="gender">
