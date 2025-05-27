@@ -64,6 +64,22 @@
             </div>
             My Trips
           </nuxt-link>
+          <nuxt-link
+            to="/profile"
+            class="flex items-center gap-x-2 w-full"
+            :class="[
+              route.path === '/profile'
+                ? 'flex items-center gap-2 rounded-lg bg-primary-100 px-3 py-2 text-primary-900  transition-all hover:text-primary-900 dark:bg-primary-950 dark:text-primary-50 dark:hover:text-primary-50'
+                : 'flex items-center gap-2 rounded-lg px-3 py-2 text-primary-500 transition-all hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-50',
+            ]"
+          >
+            <div
+              class="grid place-content-center border rounded-lg dark:bg-black dark:border-slate-800 border-slate-400 p-1 bg-white"
+            >
+              <Icon name="lucide:user" />
+            </div>
+            Profile
+          </nuxt-link>
           <div class="flex-grow"></div>
           <UDivider color="black" size="2xs" />
           <div v-if="user" class="flex items-center gap-x-4 my-1 justify-between w-full">

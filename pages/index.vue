@@ -11,6 +11,7 @@
 import { useOutfitStore } from "~/stores/outfit";
 definePageMeta({
   layout: "registered-layout",
+  middleware: ["onboarding"]
 });
 
 const store = useOutfitStore();

@@ -73,7 +73,10 @@
           <template #header>
             <div class="flex justify-between items-center">
               <h2 class="text-xl font-bold">Outfit Images</h2>
-              <UBadge color="primary">{{ selectedTrip.destination }}</UBadge>
+              <UBadge color="primary">{{
+                selectedTrip.destination[0].toUpperCase() +
+                selectedTrip.destination.slice(1)
+              }}</UBadge>
             </div>
           </template>
           <div v-if="selectedTrip.outfit_suggestions">
