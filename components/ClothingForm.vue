@@ -63,16 +63,8 @@
       </div>
       <UButton label="Add new cloth" @click="isOpen = true" />
 
-      <UModal v-model="isOpen" :ui="{ base: 'sm:max-w-7xl' }">
-        <UCard
-          :ui="{
-            base: 'w-full h-full',
-            ring: '',
-            divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-          }"
-        >
-          <ClothingModal @submitted="isOpen = false" />
-        </UCard>
+      <UModal v-model="isOpen" :ui="{ base: 'sm:max-w-4xl' }">
+        <ClothingModal @submitted="isOpen = false" />
       </UModal>
     </form>
     <ClothTable v-model="clothesList" />

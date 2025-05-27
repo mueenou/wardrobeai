@@ -1,6 +1,6 @@
 <template>
-  <form class="w-full p-6">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+  <form class="p-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <UFormGroup label="Clothing type" size="sm">
         <ClothImageInput v-model="selectedClothingType" />
       </UFormGroup>
@@ -8,7 +8,7 @@
         <ColorSelector v-model="selectedColor" />
       </UFormGroup>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       <UFormGroup label="Clothing fabric" size="sm">
         <UInputMenu
           color="primary"
