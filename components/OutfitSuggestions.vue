@@ -3,7 +3,7 @@
     class="w-full rounded-xl pl-4 flex flex-col gap-y-4 overflow-y-auto pr-4 py-2 relative"
   >
     <div
-      v-if="store.isLoading"
+      v-if="store.isGeneratingOutfits"
       class="sticky top-10 text-4xl flex flex-col justify-center items-center h-full"
     >
       <p class="text-sm">Please wait until we find the best outfits for you !</p>
@@ -45,7 +45,7 @@ const props = defineProps({
 });
 
 const store = useOutfitStore();
-const { outfitSuggestions, isLoading, loadingOutfits } = storeToRefs(store);
+const { outfitSuggestions, isGeneratingOutfits, loadingOutfits } = storeToRefs(store);
 
 // Local UI states
 const isSliderOpen = ref(false);

@@ -5,7 +5,7 @@
     >
       <Icon
         name="lucide:menu"
-        class="lg:hidden text-2xl cursor-pointer text-primary"
+        class="lg:hidden text-2xl cursor-pointer text-primary dark:text-gray-50"
         @click="uiStore.toggleSideBar"
       />
       <div class="flex items-center w-full justify-end">

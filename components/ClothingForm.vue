@@ -1,15 +1,24 @@
 <template>
   <div class="min-w-fit rounded-xl text-base overflow-y-auto px-6 py-6 relative">
-    <div class="flex items-center">
-      <p class="font-bold text-4xl text-primary">Clothes listing form</p>
-      <UTooltip
-        text="Tell us all the clothes you are bringing
-          with you"
-        :popper="{ placement: 'right' }"
-        :openDelay="300"
-      >
-        <Icon name="lucide:info" class="text-primary" />
-      </UTooltip>
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <p class="font-bold text-4xl text-primary">Clothes listing form</p>
+        <UTooltip
+          text="Tell us all the clothes you are bringing
+            with you"
+          :popper="{ placement: 'right' }"
+          :openDelay="300"
+        >
+          <Icon name="lucide:info" class="text-primary" />
+        </UTooltip>
+      </div>
+      <UButton
+        label="Reset"
+        color="gray"
+        variant="outline"
+        size="sm"
+        @click="resetForm"
+      />
     </div>
     <UDivider class="my-2" />
     <form @submit.prevent>
@@ -106,6 +115,13 @@ const selected = computed({
   get: () => tripDates.value,
   set: (newDates) => outfitStore.updateTripDates(newDates),
 });
+
+// Reset form function
+const resetForm = () => {
+  destination.value = "";
+  selected.value = { start: new Date(), end: new Date() };
+  clothesList.value = [];
+};
 
 // Load user preferences when component mounts
 onMounted(async () => {

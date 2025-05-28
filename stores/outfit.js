@@ -15,7 +15,7 @@ export const useOutfitStore = defineStore("outfit", {
     },
     destination: "",
     outfitSuggestions: null,
-    isLoading: false,
+    isGeneratingOutfits: false,
     currentTripId: null,
     loadingOutfits: new Map(),
   }),
@@ -163,7 +163,7 @@ export const useOutfitStore = defineStore("outfit", {
     // API calls
     async generateOutfits() {
       try {
-        this.isLoading = true;
+        this.isGeneratingOutfits = true;
         const response = await $fetch("/api/generate-outfits", {
           method: "POST",
           body: {
@@ -197,7 +197,7 @@ export const useOutfitStore = defineStore("outfit", {
       } catch (error) {
         throw error;
       } finally {
-        this.isLoading = false;
+        this.isGeneratingOutfits = false;
       }
     },
 
