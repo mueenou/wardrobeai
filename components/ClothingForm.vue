@@ -12,13 +12,6 @@
           <Icon name="lucide:info" class="text-primary" />
         </UTooltip>
       </div>
-      <UButton
-        label="Reset"
-        color="gray"
-        variant="outline"
-        size="sm"
-        @click="resetForm"
-      />
     </div>
     <UDivider class="my-2" />
     <form @submit.prevent>
@@ -72,17 +65,41 @@
       </div>
       <UButton label="Add new cloth" @click="isOpen = true" />
 
-      <UModal v-model="isOpen" :ui="{ base: 'sm:max-w-7xl' }">
-        <UCard
-          :ui="{
-            base: 'w-full h-full',
-            ring: '',
-            divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-          }"
+      <!-- Manual Modal Implementation -->
+      <div
+        v-if="isOpen"
+        class="fixed inset-0 z-50 overflow-y-auto"
+        aria-labelledby="modal-title"
+        role="dialog"
+        aria-modal="true"
+      >
+        <!-- Background overlay -->
+        <div
+          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          @click="isOpen = false"
+        ></div>
+
+        <!-- Modal panel -->
+        <div
+          class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
         >
-          <ClothingModal @submitted="isOpen = false" />
-        </UCard>
-      </UModal>
+          <div
+            class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-7xl"
+          >
+            <div class="absolute right-0 top-0 pr-4 pt-4">
+              <button
+                type="button"
+                class="rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none"
+                @click="isOpen = false"
+              >
+                <span class="sr-only">Close</span>
+                <Icon name="lucide:x" class="h-6 w-6" />
+              </button>
+            </div>
+            <ClothingModal @submitted="isOpen = false" />
+          </div>
+        </div>
+      </div>
     </form>
     <ClothTable v-model="clothesList" />
     <UButton
@@ -115,13 +132,6 @@ const selected = computed({
   get: () => tripDates.value,
   set: (newDates) => outfitStore.updateTripDates(newDates),
 });
-
-// Reset form function
-const resetForm = () => {
-  destination.value = "";
-  selected.value = { start: new Date(), end: new Date() };
-  clothesList.value = [];
-};
 
 // Load user preferences when component mounts
 onMounted(async () => {
