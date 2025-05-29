@@ -79,40 +79,59 @@
       </div>
 
       <!-- Manual Modal Implementation -->
-      <div
-        v-if="isOpen"
-        class="fixed inset-0 z-50 overflow-y-auto"
-        aria-labelledby="modal-title"
-        role="dialog"
-        aria-modal="true"
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
       >
-        <!-- Background overlay -->
         <div
-          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-          @click="isOpen = false"
-        ></div>
-
-        <!-- Modal panel -->
-        <div
-          class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+          v-if="isOpen"
+          class="fixed inset-0 z-50 overflow-y-auto"
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
         >
+          <!-- Background overlay -->
           <div
-            class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-7xl"
+            class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity"
+            @click="isOpen = false"
+          ></div>
+
+          <!-- Modal panel -->
+          <div
+            class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
           >
-            <div class="absolute right-0 top-0 pr-4 pt-4">
-              <button
-                type="button"
-                class="rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none"
-                @click="isOpen = false"
+            <Transition
+              enter-active-class="transition duration-200 ease-out"
+              enter-from-class="opacity-0 scale-95"
+              enter-to-class="opacity-100 scale-100"
+              leave-active-class="transition duration-150 ease-in"
+              leave-from-class="opacity-100 scale-100"
+              leave-to-class="opacity-0 scale-95"
+            >
+              <div
+                v-if="isOpen"
+                class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-7xl"
               >
-                <span class="sr-only">Close</span>
-                <Icon name="lucide:x" class="h-6 w-6" />
-              </button>
-            </div>
-            <ClothingModal @submitted="isOpen = false" />
+                <div class="absolute right-0 top-0 pr-4 pt-4">
+                  <button
+                    type="button"
+                    class="rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none"
+                    @click="isOpen = false"
+                  >
+                    <span class="sr-only">Close</span>
+                    <Icon name="lucide:x" class="h-6 w-6" />
+                  </button>
+                </div>
+                <ClothingModal @submitted="isOpen = false" />
+              </div>
+            </Transition>
           </div>
         </div>
-      </div>
+      </Transition>
     </form>
     <ClothTable v-model="clothesList" />
     <UButton
