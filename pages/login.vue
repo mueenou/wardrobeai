@@ -2,7 +2,7 @@
   <div class="flex min-h-screen items-center justify-center">
     <!-- this is a register form with email and password and Github, Google provider -->
     <UContainer class="border rounded-lg px-10 py-10 w-[500px]">
-      <UForm class="space-y-6" @submit="signIn">
+      <UForm class="space-y-6" @submit="signIn" :state="formState">
         <h2 class="text-center font-bold">Login</h2>
         <UFormGroup label="Email" name="email">
           <UInput v-model="email" />
@@ -34,6 +34,11 @@ const email = ref("");
 const password = ref(null);
 const errorMsg = ref(null);
 const isLoading = ref(false);
+
+const formState = ref({
+  email: '',
+  password: ''
+});
 
 async function signIn() {
   errorMsg.value = null;
