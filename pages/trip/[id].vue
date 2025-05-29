@@ -6,7 +6,9 @@
         <template #header>
           <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
             <div class="flex flex-col gap-2 items-start">
-              <UBadge class="font-bold text-lg">Trip to {{ trip.destination.toUpperCase() }}</UBadge>
+              <UBadge class="font-bold text-lg"
+                >Trip to {{ trip.destination.toUpperCase() }}</UBadge
+              >
               <p class="text-sm">
                 From
                 <span class="text-primary">{{
@@ -28,11 +30,13 @@
 
       <!-- Clothes List -->
       <UAccordion
-        :items="[{
-          label: 'Packed Clothes',
-          icon: 'i-heroicons-clipboard-document-list',
-          slot: 'clothes-content'
-        }]"
+        :items="[
+          {
+            label: 'Packed Clothes',
+            icon: 'lucide:luggage',
+            slot: 'clothes-content',
+          },
+        ]"
         variant="outline"
         color="primary"
         size="xl"
@@ -50,7 +54,9 @@
                   Color:
                   <div
                     class="w-4 h-4 rounded-full border border-gray-300"
-                    :style="{ backgroundColor: item.color.hex || item.color.name.toLowerCase() }"
+                    :style="{
+                      backgroundColor: item.color.hex || item.color.name.toLowerCase(),
+                    }"
                   ></div>
                 </div>
               </div>
@@ -93,7 +99,7 @@ import { useOutfitStore } from "~/stores/outfit";
 
 definePageMeta({
   layout: "registered-layout",
-  middleware: ["auth", "onboarding"]
+  middleware: ["auth", "onboarding"],
 });
 
 const route = useRoute();

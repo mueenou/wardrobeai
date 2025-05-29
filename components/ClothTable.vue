@@ -28,11 +28,11 @@
       </template>
 
       <template #actions-data="{ row }">
-        <div class="flex items-center w-full">
+        <div class="flex items-center justify-center w-full">
           <UButton
             color="red"
             variant="ghost"
-            icon="i-heroicons-trash"
+            icon="lucide:trash-2"
             @click="handleDelete(row)"
           />
         </div>

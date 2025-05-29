@@ -54,7 +54,7 @@
           class="my-2 w-full sm:w-auto"
         >
           <UPopover :popper="{ placement: 'bottom-start' }">
-            <UButton icon="i-heroicons-calendar-days-20-solid" class="w-full sm:w-auto">
+            <UButton icon="lucide:calendar-days">
               {{ format(selected.start, "d MMM, yyy") }} -
               {{ format(selected.end, "d MMM, yyy") }}
             </UButton>

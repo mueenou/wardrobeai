@@ -25,7 +25,7 @@ const handleGenerate = async () => {
   if (store.destination === "" || store.sexe === "") {
     toast.add({
       severity: "error",
-      icon: "i-heroicons-information-circle",
+      icon: "lucide:info",
       summary: "Incomplete form",
       description:
         "<p class='text-red-500'><strong>Some fields</strong> are required.</p>",

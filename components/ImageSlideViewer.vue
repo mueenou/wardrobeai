@@ -6,7 +6,7 @@
         color="gray"
         variant="ghost"
         size="sm"
-        icon="i-heroicons-x-mark-20-solid"
+        icon="lucide:x"
         class="flex sm:hidden absolute end-5 top-5 z-10"
         square
         padded
