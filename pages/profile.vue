@@ -43,6 +43,13 @@
             <GenderSelector v-model="userPreferences.gender" />
           </UFormGroup>
 
+          <UFormGroup label="Body Type" name="bodyType">
+            <BodyLanguageSelector
+              v-model="userPreferences.body_type"
+              :gender="userPreferences.gender"
+            />
+          </UFormGroup>
+
           <UFormGroup label="Ethnicity" name="ethnicity">
             <UInputMenu
               v-model="userPreferences.ethnicity"
@@ -59,20 +66,23 @@
 <script setup>
 import { format } from "date-fns";
 import { ETHNICITIES } from "~/constants/clothing";
+import { useOutfitStore } from "~/stores/outfit";
 
 definePageMeta({
   layout: "registered-layout",
-  middleware: ["auth", "onboarding"]
+  middleware: ["auth", "onboarding"],
 });
 
 const user = useSupabaseUser();
 const client = useSupabaseClient();
 const toast = useToast();
+const outfitStore = useOutfitStore();
 
 const username = ref("");
 const userPreferences = ref({
   gender: "",
   ethnicity: "Western European",
+  body_type: "",
 });
 
 // Add initial state tracking
@@ -80,6 +90,7 @@ const initialUsername = ref("");
 const initialPreferences = ref({
   gender: "",
   ethnicity: "Western European",
+  body_type: "",
 });
 
 const isSaving = ref(false);
@@ -93,7 +104,8 @@ watch(
     const usernameChanged = username.value !== initialUsername.value;
     const preferencesChanged =
       userPreferences.value.gender !== initialPreferences.value.gender ||
-      userPreferences.value.ethnicity !== initialPreferences.value.ethnicity;
+      userPreferences.value.ethnicity !== initialPreferences.value.ethnicity ||
+      userPreferences.value.body_type !== initialPreferences.value.body_type;
 
     hasChanges.value = usernameChanged || preferencesChanged;
   },
@@ -122,6 +134,7 @@ const loadUserPreferences = async () => {
       const preferences = {
         gender: data.gender || "",
         ethnicity: data.ethnicity || "Western European",
+        body_type: data.body_type || "",
       };
       userPreferences.value = { ...preferences };
       initialPreferences.value = { ...preferences };
@@ -170,6 +183,7 @@ const saveChanges = async () => {
         user_id: user.value.id,
         gender: userPreferences.value.gender,
         ethnicity: userPreferences.value.ethnicity,
+        body_type: userPreferences.value.body_type,
       },
       {
         onConflict: "user_id",
@@ -177,6 +191,11 @@ const saveChanges = async () => {
     );
 
     if (error) throw error;
+
+    // Update the Pinia outfit store with the new preferences
+    outfitStore.updateSexe(userPreferences.value.gender);
+    outfitStore.updateEthnicity(userPreferences.value.ethnicity);
+    outfitStore.updateBodyType(userPreferences.value.body_type);
 
     // Update initial values after successful save
     initialUsername.value = username.value;
