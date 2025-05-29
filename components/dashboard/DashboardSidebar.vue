@@ -115,7 +115,7 @@ async function signOut() {
     if (error) throw error;
     navigateTo("/login");
   } catch (error) {
-    console.log(error.message);
+    throw error;
   }
 }
 </script>

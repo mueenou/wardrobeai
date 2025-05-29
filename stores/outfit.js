@@ -95,7 +95,6 @@ export const useOutfitStore = defineStore("outfit", {
 
     // Generate prompt for OpenAI
     generateOOTDPrompt() {
-      console.log("bodyType in prompt:", this.bodyType);
       const categorizedClothes = this.clothesList.reduce((acc, item) => {
         const category = item.type;
         if (!acc[category]) {
@@ -209,11 +208,6 @@ export const useOutfitStore = defineStore("outfit", {
     },
 
     createImagePrompt(outfitDetails) {
-      console.log("Creating image prompt with store values:", {
-        bodyType: this.bodyType,
-        sexe: this.sexe,
-        ethnicity: this.ethnicity,
-      });
       let prompt = `Create a **realistic, full-body, head-to-toe fashion photograph** of an **${this.bodyType}** ${this.sexe} model with ${this.ethnicity} skin tone. 
       The model should have a **visibly ${this.bodyType} body type** with accurate physical proportions, clearly reflecting curves and body mass. 
       They are wearing an outfit consisting of: ${outfitDetails.Outfit}. 
@@ -311,12 +305,6 @@ export const useOutfitStore = defineStore("outfit", {
       if (tripData.outfit_suggestions) {
         this.outfitSuggestions = tripData.outfit_suggestions;
       }
-
-      console.log("Trip data loaded into store:", {
-        sexe: this.sexe,
-        ethnicity: this.ethnicity,
-        bodyType: this.bodyType,
-      });
     },
   },
 });
