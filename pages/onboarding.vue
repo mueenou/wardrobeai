@@ -4,7 +4,9 @@
       <template #header>
         <div class="text-center">
           <h2 class="text-2xl font-bold">Welcome to Wardrobe.AI</h2>
-          <p class="text-gray-500 dark:text-gray-400 mt-2">Let's set up your preferences</p>
+          <p class="text-gray-500 dark:text-gray-400 mt-2">
+            Let's set up your preferences
+          </p>
         </div>
       </template>
 
@@ -19,7 +21,9 @@
 
         <UFormGroup label="Gender" name="gender">
           <GenderSelector v-model="formData.gender" />
-          <p v-if="errors.gender" class="text-red-500 text-sm mt-1">{{ errors.gender }}</p>
+          <p v-if="errors.gender" class="text-red-500 text-sm mt-1">
+            {{ errors.gender }}
+          </p>
         </UFormGroup>
 
         <UFormGroup label="Ethnicity" name="ethnicity">
@@ -31,12 +35,14 @@
           />
         </UFormGroup>
 
-        <UButton
-          type="submit"
-          color="primary"
-          block
-          :loading="isSubmitting"
-        >
+        <UFormGroup label="Body Type" name="bodyType">
+          <BodyLanguageSelector v-model="formData.bodyType" :gender="formData.gender" />
+          <p v-if="errors.bodyType" class="text-red-500 text-sm mt-1">
+            {{ errors.bodyType }}
+          </p>
+        </UFormGroup>
+
+        <UButton type="submit" color="primary" block :loading="isSubmitting">
           Complete Setup
         </UButton>
       </form>
@@ -46,21 +52,24 @@
 
 <script setup>
 import { ETHNICITIES } from "~/constants/clothing";
+import { useOutfitStore } from "~/stores/outfit";
 
 definePageMeta({
   layout: "default",
-  middleware: ["onboarding"]
+  middleware: ["onboarding"],
 });
 
 const user = useSupabaseUser();
 const client = useSupabaseClient();
 const router = useRouter();
 const toast = useToast();
+const outfitStore = useOutfitStore();
 
 const formData = ref({
   username: "",
   gender: "",
-  ethnicity: "Western European"
+  ethnicity: "Western European",
+  bodyType: "",
 });
 
 const errors = ref({});
@@ -87,6 +96,11 @@ const validateForm = () => {
     isValid = false;
   }
 
+  if (!formData.value.bodyType) {
+    errors.value.bodyType = "Please select your body type";
+    isValid = false;
+  }
+
   return isValid;
 };
 
@@ -97,21 +111,25 @@ const handleSubmit = async () => {
   try {
     // Update user metadata with username
     const { error: updateError } = await client.auth.updateUser({
-      data: { username: formData.value.username }
+      data: { username: formData.value.username },
     });
 
     if (updateError) throw updateError;
 
     // Save preferences
-    const { error: preferencesError } = await client
-      .from("user_preferences")
-      .upsert({
-        user_id: user.value.id,
-        gender: formData.value.gender,
-        ethnicity: formData.value.ethnicity,
-      });
+    const { error: preferencesError } = await client.from("user_preferences").upsert({
+      user_id: user.value.id,
+      gender: formData.value.gender,
+      ethnicity: formData.value.ethnicity,
+      body_type: formData.value.bodyType,
+    });
 
     if (preferencesError) throw preferencesError;
+
+    // Update the Pinia outfit store with the new preferences
+    outfitStore.updateSexe(formData.value.gender);
+    outfitStore.updateEthnicity(formData.value.ethnicity);
+    outfitStore.updateBodyType(formData.value.bodyType);
 
     toast.add({
       severity: "success",
@@ -134,4 +152,4 @@ const handleSubmit = async () => {
     isSubmitting.value = false;
   }
 };
-</script> 
+</script>

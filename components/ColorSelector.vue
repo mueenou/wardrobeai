@@ -10,17 +10,17 @@
       class="my-2 w-fit"
     />
     <div class="flex gap-2 flex-wrap max-h-[300px] overflow-y-auto p-2 rounded">
-      <div
-        v-for="color in filteredColor"
-        :key="color.id"
-        class="border w-[50px] h-[50px] rounded-full flex flex-col items-center justify-center hover:border-primary cursor-pointer"
-        :style="{ backgroundColor: color.hex }"
-        :class="{ 'ring-4 ring-orange-500 border-none': modelValue === color }"
-        role="button"
-        :aria-label="`Select ${color.name} color`"
-        :aria-selected="modelValue === color.name.toLowerCase()"
-        @click="selectColor(color)"
-      ></div>
+      <UTooltip v-for="color in filteredColor" :key="color.id" :text="color.name">
+        <div
+          class="border w-[50px] h-[50px] rounded-full flex flex-col items-center justify-center hover:border-primary cursor-pointer"
+          :style="{ backgroundColor: color.hex }"
+          :class="{ 'ring-4 ring-orange-500 border-none': modelValue === color }"
+          role="button"
+          :aria-label="`Select ${color.name} color`"
+          :aria-selected="modelValue === color.name.toLowerCase()"
+          @click="selectColor(color)"
+        ></div>
+      </UTooltip>
     </div>
   </div>
 </template>

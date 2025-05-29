@@ -8,6 +8,7 @@ export const useOutfitStore = defineStore("outfit", {
     clothesList: [],
     sexe: "",
     ethnicity: "Western European",
+    bodyType: "",
     numberOfDays: 1,
     tripDates: {
       start: sub(new Date(), { days: 14 }),
@@ -15,7 +16,7 @@ export const useOutfitStore = defineStore("outfit", {
     },
     destination: "",
     outfitSuggestions: null,
-    isLoading: false,
+    isGeneratingOutfits: false,
     currentTripId: null,
     loadingOutfits: new Map(),
   }),
@@ -39,6 +40,7 @@ export const useOutfitStore = defineStore("outfit", {
         if (data) {
           this.sexe = data.gender || "";
           this.ethnicity = data.ethnicity || "Western European";
+          this.bodyType = data.body_type || "";
         }
       } catch (error) {
         console.error("Error loading user preferences:", error);
@@ -65,6 +67,10 @@ export const useOutfitStore = defineStore("outfit", {
       this.ethnicity = value;
     },
 
+    updateBodyType(value) {
+      this.bodyType = value;
+    },
+
     updateTripDates(dates) {
       this.tripDates = dates;
       const startDate = new Date(dates.start);
@@ -89,6 +95,7 @@ export const useOutfitStore = defineStore("outfit", {
 
     // Generate prompt for OpenAI
     generateOOTDPrompt() {
+      console.log("bodyType in prompt:", this.bodyType);
       const categorizedClothes = this.clothesList.reduce((acc, item) => {
         const category = item.type;
         if (!acc[category]) {
@@ -104,9 +111,9 @@ export const useOutfitStore = defineStore("outfit", {
 
       return `As a personal fashion stylist, create ${
         this.numberOfDays
-      } daily outfit combinations for a ${this.ethnicity} skinned ${
-        this.sexe
-      } for a ${this.numberOfDays}-day trip${
+      } daily outfit combinations for a ${this.bodyType} bodied ${
+        this.ethnicity
+      } skinned ${this.sexe} for a ${this.numberOfDays}-day trip${
         this.destination ? ` to ${this.destination}` : ""
       }.
       
@@ -163,7 +170,7 @@ export const useOutfitStore = defineStore("outfit", {
     // API calls
     async generateOutfits() {
       try {
-        this.isLoading = true;
+        this.isGeneratingOutfits = true;
         const response = await $fetch("/api/generate-outfits", {
           method: "POST",
           body: {
@@ -197,15 +204,24 @@ export const useOutfitStore = defineStore("outfit", {
       } catch (error) {
         throw error;
       } finally {
-        this.isLoading = false;
+        this.isGeneratingOutfits = false;
       }
     },
 
     createImagePrompt(outfitDetails) {
-      let prompt = `Create a realistic full body head to feet fashion photography for a ${this.ethnicity} skinned ${this.sexe} wearing an outfit consisting of ${outfitDetails.Outfit}. 
-      The style is ${outfitDetails["Style Theme"]}. 
+      console.log("Creating image prompt with store values:", {
+        bodyType: this.bodyType,
+        sexe: this.sexe,
+        ethnicity: this.ethnicity,
+      });
+      let prompt = `Create a **realistic, full-body, head-to-toe fashion photograph** of an **${this.bodyType}** ${this.sexe} model with ${this.ethnicity} skin tone. 
+      The model should have a **visibly ${this.bodyType} body type** with accurate physical proportions, clearly reflecting curves and body mass. 
+      They are wearing an outfit consisting of: ${outfitDetails.Outfit}. 
+      The overall style theme is: ${outfitDetails["Style Theme"]}.
+      Photograph the model in ${this.destination}, ensuring the background and lighting match a realistic fashion photoshoot scene.
       The outfit should be photographed in ${this.destination}. It should be a png image.
-      Focus on showcasing the outfit's details and how the pieces work together.`;
+      Focus on showcasing the outfit's details and how the pieces work together.
+      Make sure to **emphasize how the outfit fits, drapes, and interacts with the ${this.bodyType} body type**. The image must clearly showcase the full outfit, from head to feet.`;
       return prompt;
     },
 
@@ -213,6 +229,24 @@ export const useOutfitStore = defineStore("outfit", {
       try {
         // Set loading state for this specific outfit
         this.loadingOutfits.set(day, true);
+
+        // Fetch latest user preferences
+        const user = useSupabaseUser();
+        const client = useSupabaseClient();
+        const { data: preferences, error } = await client
+          .from("user_preferences")
+          .select("*")
+          .eq("user_id", user.value.id)
+          .single();
+
+        if (error) throw error;
+
+        // Update store with latest preferences
+        if (preferences) {
+          this.sexe = preferences.gender || "";
+          this.ethnicity = preferences.ethnicity || "Western European";
+          this.bodyType = preferences.body_type || "";
+        }
 
         const imagePrompt = this.createImagePrompt(outfit);
 
@@ -265,6 +299,7 @@ export const useOutfitStore = defineStore("outfit", {
       };
       this.sexe = tripData.sexe;
       this.ethnicity = tripData.ethnicity;
+      this.bodyType = tripData.body_type || "";
       this.currentTripId = tripData.id;
       // Update number of days based on the trip dates
       const startDate = new Date(tripData.start_date);
@@ -276,6 +311,12 @@ export const useOutfitStore = defineStore("outfit", {
       if (tripData.outfit_suggestions) {
         this.outfitSuggestions = tripData.outfit_suggestions;
       }
+
+      console.log("Trip data loaded into store:", {
+        sexe: this.sexe,
+        ethnicity: this.ethnicity,
+        bodyType: this.bodyType,
+      });
     },
   },
 });

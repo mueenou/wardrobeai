@@ -9,24 +9,19 @@ export default defineNuxtConfig({
     "@nuxtjs/supabase",
     "@nuxt/fonts",
   ],
-  nitro: {
-    routeRules: {
-      "/**": { middleware: { override: true } },
-    },
-  },
   supabase: {
     redirect: true,
     redirectOptions: {
-      login: "/login",
+      login: "/landing",
       callback: "/confirm",
       include: undefined,
-      exclude: ["/register"],
+      exclude: ["/register", "/landing", "/login"],
       cookieRedirect: false,
     },
   },
   runtimeConfig: {
     public: {
-      openaiApiKey: process.env.OPENAI_API_KEY, // Ajoutez votre clé OpenAI ici
+      openaiApiKey: process.env.OPENAI_API_KEY,
     },
   },
 });
