@@ -1,8 +1,10 @@
 <template>
-  <div class="min-w-fit rounded-xl text-base overflow-y-auto px-6 py-6 relative">
-    <div class="flex items-center justify-between">
+  <div
+    class="min-w-fit rounded-xl text-base overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 relative"
+  >
+    <div class="flex items-center justify-between flex-col gap-4 sm:flex-row">
       <div class="flex items-center">
-        <p class="font-bold text-4xl text-primary">Clothes listing form</p>
+        <p class="font-bold text-2xl sm:text-4xl text-primary">Clothes listing form</p>
         <UTooltip
           text="Tell us all the clothes you are bringing
             with you"
@@ -15,9 +17,9 @@
     </div>
     <UDivider class="my-2" />
     <form @submit.prevent>
-      <div class="flex flex-col gap-4 w-fit items-center mx-auto">
+      <div class="flex flex-col gap-4 w-full sm:w-fit items-center mx-auto">
         <!-- User Preferences Display -->
-        <div class="flex gap-6 items-center p-4 rounded-lg">
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center p-4 rounded-lg">
           <div class="flex items-center gap-2 bg-primary/10 py-2 px-4 rounded-full">
             <Icon name="lucide:user" class="text-primary" />
             <span class="font-medium">Gender:</span>
@@ -32,8 +34,12 @@
           </div>
         </div>
       </div>
-      <div class="flex gap-4 w-fit items-center">
-        <UFormGroup label="Destination (optional)" size="sm" class="my-2">
+      <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-fit items-center">
+        <UFormGroup
+          label="Destination (optional)"
+          size="sm"
+          class="my-2 w-full sm:w-auto"
+        >
           <UInput
             v-model="destination"
             placeholder="Where are you going?"
@@ -45,10 +51,10 @@
             outfitStore.numberOfDays > 0 ? `- ${outfitStore.numberOfDays} days` : ''
           }`"
           size="sm"
-          class="my-2"
+          class="my-2 w-full sm:w-auto"
         >
           <UPopover :popper="{ placement: 'bottom-start' }">
-            <UButton icon="i-heroicons-calendar-days-20-solid">
+            <UButton icon="i-heroicons-calendar-days-20-solid" class="w-full sm:w-auto">
               {{ format(selected.start, "d MMM, yyy") }} -
               {{ format(selected.end, "d MMM, yyy") }}
             </UButton>
@@ -63,7 +69,14 @@
           </UPopover>
         </UFormGroup>
       </div>
-      <UButton label="Add new cloth" @click="isOpen = true" />
+      <div class="flex justify-center w-full">
+        <UButton
+          label="Add new cloth"
+          @click="isOpen = true"
+          class="w-full sm:w-auto"
+          icon="lucide:plus"
+        />
+      </div>
 
       <!-- Manual Modal Implementation -->
       <div
