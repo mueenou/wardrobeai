@@ -12,10 +12,11 @@
           <UInput v-model="password" type="password" />
         </UFormGroup>
 
-        <p>{{ errorMsg }}</p>
-        <p>{{ successMsg }}</p>
+        <p class="text-red-500">{{ errorMsg }}</p>
 
-        <UButton type="submit" color="primary" block> Submit </UButton>
+        <UButton type="submit" color="primary" block :loading="isLoading">
+          {{ isLoading ? 'Signing in...' : 'Submit' }}
+        </UButton>
         <p class="text-center text-sm">
           Don't have an account?
           <span><nuxt-link to="/register" class="underline">Register</nuxt-link></span>
@@ -28,20 +29,29 @@
 <script setup>
 const router = useRouter();
 const client = useSupabaseClient();
+const toast = useToast();
 const email = ref("");
 const password = ref(null);
 const errorMsg = ref(null);
-const successMsg = ref(null);
+const isLoading = ref(false);
 
 async function signIn() {
   errorMsg.value = null;
-  successMsg.value = null;
+  isLoading.value = true;
+  
   try {
     const { error, data } = await client.auth.signInWithPassword({
       email: email.value,
       password: password.value,
     });
     if (error) throw error;
+
+    toast.add({
+      title: "Welcome back!",
+      description: "Successfully signed in.",
+      timeout: 3000,
+      icon: "i-bx-check",
+    });
 
     // Wait a moment for the auth state to update
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -51,6 +61,15 @@ async function signIn() {
   } catch (error) {
     console.error("Login error:", error);
     errorMsg.value = error.message;
+    toast.add({
+      title: "Login failed",
+      description: error.message,
+      timeout: 3000,
+      icon: "i-bx-error",
+      color: "red",
+    });
+  } finally {
+    isLoading.value = false;
   }
 }
 </script>

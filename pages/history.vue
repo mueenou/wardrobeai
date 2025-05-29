@@ -15,9 +15,9 @@
         >
           <template #header>
             <div class="flex flex-col md:flex-row gap-2 justify-between items-center">
-              <UBadge class="font-bold min-w-[55px] grid place-content-center text-md"
-                >Trip to {{ trip.destination }}</UBadge
-              >
+              <UBadge class="font-bold min-w-[55px] grid place-content-center text-md">{{
+                trip.destination
+              }}</UBadge>
               <UBadge
                 :color="new Date(trip.start_date) > new Date() ? 'green' : 'gray'"
                 variant="soft"
@@ -169,7 +169,7 @@ import { format } from "date-fns";
 
 definePageMeta({
   layout: "registered-layout",
-  middleware: ["auth", "onboarding"]
+  middleware: ["auth", "onboarding"],
 });
 
 const userStore = useUserStore();
