@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
       model: "gpt-image-1",
       prompt,
       n: 1,
-      size: "1024x1536",
+      size: "512x768", // More mobile-friendly 2:3 aspect ratio at smaller size
       quality: "low",
       // Do NOT include `response_format`, it's not supported
     });
