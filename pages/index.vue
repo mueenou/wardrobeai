@@ -3,7 +3,10 @@
   <div class="mx-auto flex flex-col h-full mb-8 md:flex-row">
     <ClothingForm @generate="handleGenerate" />
     <UDivider orientation="vertical" type="dashed" />
-    <OutfitSuggestions v-if="currentTripId || store.isGeneratingOutfits" :trip-id="currentTripId" />
+    <OutfitSuggestions
+      v-if="currentTripId || store.isGeneratingOutfits"
+      :trip-id="currentTripId"
+    />
   </div>
 </template>
 
@@ -11,7 +14,7 @@
 import { useOutfitStore } from "~/stores/outfit";
 definePageMeta({
   layout: "registered-layout",
-  middleware: ["auth", "onboarding"]
+  middleware: ["auth", "onboarding"],
 });
 
 const store = useOutfitStore();
