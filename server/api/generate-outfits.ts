@@ -11,11 +11,12 @@ export default defineEventHandler(async (event) => {
     const { prompt } = body;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: "You are a fashion API that only responds with valid JSON.",
+          content:
+            "You are a fashion API that only responds with valid JSON. Send me plain JSON no need of triple back ticks.",
         },
         {
           role: "user",

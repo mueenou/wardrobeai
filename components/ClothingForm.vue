@@ -51,7 +51,7 @@
             outfitStore.numberOfDays > 0 ? `- ${outfitStore.numberOfDays} days` : ''
           }`"
           size="sm"
-          class="my-2 w-full sm:w-auto"
+          class="my-2 sm:w-auto"
         >
           <UPopover :popper="{ placement: 'bottom-start' }">
             <UButton icon="lucide:calendar-days">
@@ -137,10 +137,10 @@
     <UButton
       v-if="clothesList.length > 0"
       label="Submit"
-      color="indigo"
-      variant="outline"
+      color="primary"
+      variant="solid"
       size="md"
-      class="absolute right-6 !bg-background dark:text-white"
+      class="absolute right-2 md:right-4 mt-4"
       @click="$emit('generate')"
     />
   </div>

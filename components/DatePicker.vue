@@ -1,4 +1,5 @@
 <script setup>
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { DatePicker as VCalendarDatePicker } from "v-calendar";
 import "v-calendar/dist/style.css";
 
@@ -35,13 +36,29 @@ function onDayClick(_, event) {
   const target = event.target;
   target.blur();
 }
+
+const isMobile = ref(false);
+
+function checkMobile() {
+  isMobile.value = window.innerWidth < 640; // Tailwind's sm breakpoint
+}
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener("resize", checkMobile);
+});
+onUnmounted(() => {
+  window.removeEventListener("resize", checkMobile);
+});
+
+const columns = computed(() => (isMobile.value ? 1 : 2));
 </script>
 
 <template>
   <VCalendarDatePicker
     v-if="date && date?.start && date?.end"
     v-model.range="date"
-    :columns="2"
+    :columns="columns"
     v-bind="{ ...attrs, ...$attrs }"
     @dayclick="onDayClick"
   />

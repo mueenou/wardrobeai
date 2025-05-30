@@ -16,13 +16,13 @@
     </div>
     <div
       class="border w-[10rem] h-[10rem] p-2 grid place-content-center rounded cursor-pointer hover:border-primary overflow-hidden"
-      :class="{ 'ring-2 ring-orange-500 border-none': modelValue == 'normal' }"
-      @click="$emit('update:modelValue', 'normal')"
+      :class="{ 'ring-2 ring-orange-500 border-none': modelValue == 'slim' }"
+      @click="$emit('update:modelValue', 'slim')"
     >
-      <UTooltip text="Normal" :openDelay="300">
+      <UTooltip text="Slim" :openDelay="300">
         <img
           :src="normalImage"
-          alt="Normal body type"
+          alt="Slim body type"
           class="w-full h-full object-contain p-4 max-h-[14rem] max-w-[7rem] mx-auto"
           :class="obeseImage.includes('man') ? 'scale-125' : ''"
         />

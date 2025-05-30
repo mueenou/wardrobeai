@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full h-full p-4">
-    <div v-if="trip" class="flex flex-col gap-y-6">
+  <div class="w-full h-full p-2">
+    <div v-if="trip" class="flex flex-col gap-y-2">
       <!-- Trip Header -->
       <UCard>
         <template #header>
@@ -68,12 +68,9 @@
       </UAccordion>
 
       <!-- Outfit Suggestions -->
-      <UCard v-if="trip.outfit_suggestions">
-        <template #header>
-          <h2 class="text-xl font-bold">Outfit Suggestions</h2>
-        </template>
-        <OutfitSuggestions :trip-id="route.params.id" />
-      </UCard>
+      <h2 class="text-xl font-bold">Outfit Suggestions</h2>
+      <UDivider />
+      <OutfitSuggestions :trip-id="route.params.id" />
     </div>
     <div v-else class="flex justify-center items-center h-full">
       <p class="text-lg font-bold">Loading trip details...</p>

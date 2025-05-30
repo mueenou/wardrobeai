@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="w-full rounded-xl pl-4 flex flex-col gap-y-4 overflow-y-auto pr-4 py-2 relative"
-  >
+  <div class="w-full rounded-xl flex flex-col gap-y-4 overflow-y-auto py-2 relative">
     <div
       v-if="store.isGeneratingOutfits"
       class="sticky top-10 text-4xl flex flex-col justify-center items-center h-full"

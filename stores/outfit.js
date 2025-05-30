@@ -143,6 +143,7 @@ export const useOutfitStore = defineStore("outfit", {
       - Style Theme: String
       - Perfect for: [activities]"
       
+      Make sure to respect the rules of the format.
       Additional considerations:
       - Ensure outfits are coordinated and color-matched
       - Mix and match items efficiently for the ${this.numberOfDays}-day period

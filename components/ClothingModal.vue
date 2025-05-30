@@ -30,8 +30,8 @@
       <UButton
         @click="addClothToList"
         label="Add cloth"
-        color="indigo"
-        variant="outline"
+        color="primary"
+        variant="solid"
         size="md"
       />
     </div>

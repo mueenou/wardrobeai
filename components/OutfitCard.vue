@@ -1,22 +1,24 @@
 <template>
-  <UCard class="hover:ring hover:ring-primary duration-300">
+  <UCard class="border ring-0">
     <template #header>
-      <div class="flex gap-2 items-center font-bold">
-        <UBadge class="font-bold min-w-[55px] grid place-content-center">{{
-          day
-        }}</UBadge>
-        <p class="flex-grow">{{ outfit.Outfit }}</p>
+      <div class="flex flex-col xl:flex-row gap-2 items-start">
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <UBadge class="font-bold min-w-[55px] grid place-content-center">{{
+            day
+          }}</UBadge>
+          <p class="flex-grow truncate">{{ outfit.Outfit }}</p>
+        </div>
         <UTooltip text="See how it looks in an image!">
           <UButton
             size="2xs"
             variant="outline"
-            class="self-end"
+            class="w-full sm:w-auto"
             :icon="isLoading ? 'lucide:loader-2' : 'lucide:sparkles'"
             :loading="isLoading"
             :disabled="isLoading"
             @click="handleGenerateImage"
           >
-            {{ isLoading ? "Generating" : "Generate look" }}
+            {{ isLoading ? "Generating" : "Generate image" }}
           </UButton>
         </UTooltip>
       </div>
@@ -50,7 +52,7 @@
 </template>
 
 <script setup>
-import { useOutfitStore } from '~/stores/outfit';
+import { useOutfitStore } from "~/stores/outfit";
 
 const props = defineProps({
   day: String,
@@ -58,8 +60,8 @@ const props = defineProps({
   isLoading: Boolean,
   tripId: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const emit = defineEmits(["generateImage", "showImage"]);
