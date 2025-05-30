@@ -9,6 +9,12 @@ export default defineNuxtConfig({
     "@nuxtjs/supabase",
     "@nuxt/fonts",
   ],
+  colorMode: {
+    preference: "system",
+    fallback: "light",
+    classSuffix: "",
+    storageKey: "nuxt-color-mode",
+  },
   supabase: {
     redirect: true,
     redirectOptions: {

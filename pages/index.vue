@@ -1,6 +1,6 @@
 <!-- index.vue -->
 <template>
-  <div class="mx-auto flex flex-col h-full mb-8 md:flex-row">
+  <div class="mx-auto flex flex-col h-full mb-8 xl:flex-row">
     <ClothingForm @generate="handleGenerate" />
     <UDivider orientation="vertical" type="dashed" />
     <OutfitSuggestions

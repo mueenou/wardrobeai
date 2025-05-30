@@ -25,7 +25,7 @@
         </ClientOnly>
       </div>
     </header>
-    <main class="m-8 border dark:border-slate-800 h-full rounded-xl">
+    <main class="dark:border-slate-800 h-full rounded-xl">
       <slot />
     </main>
   </div>

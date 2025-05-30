@@ -19,7 +19,8 @@
             <Icon
               :name="colorMode.value === 'dark' ? 'lucide:moon' : 'lucide:sun'"
               @click="
-                colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+                () =>
+                  (colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark')
               "
               :class="`${
                 colorMode.value === 'dark' ? 'text-primary-400' : 'text-primary-600'

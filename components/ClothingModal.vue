@@ -22,7 +22,7 @@
           color="primary"
           v-model="selectedStyleTag"
           :options="styleTags"
-          icon="material-symbols:style"
+          icon="lucide:tag"
         />
       </UFormGroup>
     </div>

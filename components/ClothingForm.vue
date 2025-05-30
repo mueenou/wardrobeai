@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-w-fit rounded-xl text-base overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 relative"
+    class="min-w-fit rounded-xl text-base overflow-y-auto px-2 md:px-4 sm:px-6 py-4 sm:py-6 relative min-h-screen"
   >
     <div class="flex items-center justify-between flex-col gap-4 sm:flex-row">
       <div class="flex items-center">
@@ -140,7 +140,7 @@
       color="indigo"
       variant="outline"
       size="md"
-      class="mt-2 absolute bottom-2 right-6"
+      class="absolute right-6 !bg-background dark:text-white"
       @click="$emit('generate')"
     />
   </div>

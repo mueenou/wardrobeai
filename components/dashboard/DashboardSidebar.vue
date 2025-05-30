@@ -80,7 +80,6 @@
             </div>
             Profile
           </nuxt-link>
-          <div class="flex-grow"></div>
           <UDivider color="black" size="2xs" />
           <div v-if="user" class="flex items-center gap-x-4 my-1 justify-between w-full">
             <UAvatar
@@ -88,13 +87,17 @@
               src="https://avatars.githubusercontent.com/u/739984?v=4"
               alt="Avatar"
             />
-            <UButton
+            <div
               @click="signOut"
-              label="Logout"
-              variant="ghost"
-              color="primary"
-              icon="i-mdi:logout"
-            />
+              class="flex items-center cursor-pointer gap-2 rounded-lg px-3 py-2 text-primary-500 transition-all hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-50"
+            >
+              <div
+                class="grid place-content-center border rounded-lg dark:bg-black dark:border-slate-800 border-slate-400 p-1 bg-white"
+              >
+                <Icon name="lucide:log-out" />
+              </div>
+              Logout
+            </div>
           </div>
         </nav>
       </div>
